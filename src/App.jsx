@@ -3,7 +3,9 @@ import { Routes, Route } from "react-router-dom";
 
 import "./App.css";
 
-import { Container } from "@mui/material";
+import { getDesignTokens } from "./utils/theme";
+
+import { Container, CssBaseline } from "@mui/material";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -28,20 +30,14 @@ function App() {
 		[]
 	);
 
-	const theme = useMemo(
-		() =>
-			createTheme({
-				palette: {
-					mode,
-				},
-			}),
-		[mode]
-	);
+	const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+
 	return (
 		<ColorModeContext.Provider value={colorMode}>
 			<ThemeProvider theme={theme}>
+				<CssBaseline enableColorScheme />
 				<ResponsiveAppBar></ResponsiveAppBar>
-				<Container sx={{ width: 900, marginTop: 5 }}>
+				<Container sx={{ maxWidth: 900, marginTop: 5 }}>
 					<Routes>
 						<Route path="/" element={<Home />} />
 						<Route path="/trip" element={<Trip />} />

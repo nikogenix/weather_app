@@ -53,28 +53,9 @@ function ResponsiveAppBar() {
 	const toggleTemperature = () => {};
 
 	return (
-		<AppBar position="static" color="primary" enableColorOnDark>
+		<AppBar position="static" color="primary">
 			<Container maxWidth="xl">
 				<Toolbar disableGutters>
-					<CycloneIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-					<Typography
-						variant="h5"
-						noWrap
-						component="a"
-						href="/"
-						sx={{
-							mr: 2,
-							display: { xs: "none", md: "flex" },
-							fontFamily: "monospace",
-							fontWeight: 700,
-							letterSpacing: ".3rem",
-							color: "inherit",
-							textDecoration: "none",
-						}}
-					>
-						weather
-					</Typography>
-
 					<Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
 						<IconButton
 							size="large"
@@ -112,26 +93,6 @@ function ResponsiveAppBar() {
 						</Menu>
 					</Box>
 
-					<CycloneIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-					<Typography
-						variant="h5"
-						noWrap
-						component="a"
-						href=""
-						sx={{
-							mr: 2,
-							display: { xs: "flex", md: "none" },
-							fontFamily: "monospace",
-							fontWeight: 700,
-							letterSpacing: ".3rem",
-							color: "inherit",
-							textDecoration: "none",
-							flexGrow: 1,
-						}}
-					>
-						weather
-					</Typography>
-
 					<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
 						{pages.map((page) => (
 							<Button
@@ -145,6 +106,26 @@ function ResponsiveAppBar() {
 							</Button>
 						))}
 					</Box>
+
+					<CycloneIcon sx={{ display: "flex", mr: 1 }} />
+					<Typography
+						variant="h5"
+						noWrap
+						component="a"
+						href=""
+						sx={{
+							mr: 2,
+							display: "flex",
+							fontFamily: "monospace",
+							fontWeight: 700,
+							letterSpacing: ".3rem",
+							color: "inherit",
+							textDecoration: "none",
+							flexGrow: 1,
+						}}
+					>
+						weather
+					</Typography>
 
 					<Box sx={{ flexGrow: 0 }}>
 						<IconButton onClick={toggleTemperature} color="inherit">
