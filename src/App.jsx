@@ -1,19 +1,20 @@
 import { useMemo, useState } from "react";
+import { Routes, Route } from "react-router-dom";
 
 import "./App.css";
 
-import { Button, Box, Container, Typography, TextField } from "@mui/material";
+import { Container } from "@mui/material";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import ResponsiveAppBar from "./components/ResponsiveAppBar";
+import ResponsiveAppBar from "./layouts/ResponsiveAppBar";
 
 import { ColorModeContext } from "./context/ThemeContext";
+import Home from "./pages/Home";
+import Trip from "./pages/Trip";
 
 function App() {
-	const [location, setLocation] = useState("");
-	const [date, setDate] = useState("");
-	const [user, setUser] = useState("");
+	// const [user, setUser] = useState("");
 
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 	const [mode, setMode] = useState(prefersDarkMode ? "dark" : "light");
@@ -41,10 +42,10 @@ function App() {
 			<ThemeProvider theme={theme}>
 				<ResponsiveAppBar></ResponsiveAppBar>
 				<Container sx={{ width: 900, marginTop: 5 }}>
-					<Box>
-						<TextField label="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
-						<TextField label="Date" value={date} onChange={(e) => setDate(e.target.value)} />
-					</Box>
+					<Routes>
+						<Route path="/" element={<Home />} />
+						<Route path="/trip" element={<Trip />} />
+					</Routes>
 				</Container>
 			</ThemeProvider>
 		</ColorModeContext.Provider>

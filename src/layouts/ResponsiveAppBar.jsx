@@ -1,5 +1,6 @@
 import { useTheme } from "@mui/material/styles";
 import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -15,24 +16,41 @@ import MenuItem from "@mui/material/MenuItem";
 import CycloneIcon from "@mui/icons-material/Cyclone";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
+import MenuIcon from "@mui/icons-material/Menu";
+import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
 
 import { ColorModeContext } from "../context/ThemeContext";
+import { Button } from "@mui/material";
 
 const userMenu = ["preferences", "logout"];
+const pages = [
+	{ name: "home", path: "/" },
+	{ name: "plan a trip", path: "/trip" },
+];
 
 function ResponsiveAppBar() {
 	const theme = useTheme();
 	const colorMode = useContext(ColorModeContext);
 
-	const [anchorElUser, setAnchorElUser] = useState(null);
+	const [anchorElNav, setAnchorElNav] = useState(null);
+	const handleOpenNavMenu = (event) => {
+		setAnchorElNav(event.currentTarget);
+	};
+	const handleCloseNavMenu = () => {
+		setAnchorElNav(null);
+	};
 
+	const [anchorElUser, setAnchorElUser] = useState(null);
 	const handleOpenUserMenu = (event) => {
 		setAnchorElUser(event.currentTarget);
 	};
-
 	const handleCloseUserMenu = () => {
 		setAnchorElUser(null);
 	};
+
+	//TODO
+	const preferences = { temperature: "C" };
+	const toggleTemperature = () => {};
 
 	return (
 		<AppBar position="static" color="primary" enableColorOnDark>
@@ -52,11 +70,47 @@ function ResponsiveAppBar() {
 							letterSpacing: ".3rem",
 							color: "inherit",
 							textDecoration: "none",
-							flexGrow: 1,
 						}}
 					>
 						weather
 					</Typography>
+
+					<Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+						<IconButton
+							size="large"
+							aria-label="account of current user"
+							aria-controls="menu-appbar"
+							aria-haspopup="true"
+							onClick={handleOpenNavMenu}
+							color="inherit"
+						>
+							<MenuIcon />
+						</IconButton>
+						<Menu
+							id="menu-appbar"
+							anchorEl={anchorElNav}
+							anchorOrigin={{
+								vertical: "bottom",
+								horizontal: "left",
+							}}
+							keepMounted
+							transformOrigin={{
+								vertical: "top",
+								horizontal: "left",
+							}}
+							open={Boolean(anchorElNav)}
+							onClose={handleCloseNavMenu}
+							sx={{
+								display: { xs: "block", md: "none" },
+							}}
+						>
+							{pages.map((page) => (
+								<MenuItem key={page.name} onClick={handleCloseNavMenu} component={Link} to={page.path}>
+									<Typography textAlign="center">{page.name}</Typography>
+								</MenuItem>
+							))}
+						</Menu>
+					</Box>
 
 					<CycloneIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
 					<Typography
@@ -78,7 +132,38 @@ function ResponsiveAppBar() {
 						weather
 					</Typography>
 
+					<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+						{pages.map((page) => (
+							<Button
+								key={page.name}
+								onClick={handleCloseNavMenu}
+								component={Link}
+								to={page.path}
+								sx={{ my: 2, color: "white", display: "block" }}
+							>
+								{page.name}
+							</Button>
+						))}
+					</Box>
+
 					<Box sx={{ flexGrow: 0 }}>
+						<IconButton onClick={toggleTemperature} color="inherit">
+							{preferences.temperature === "C" ? (
+								<>
+									<DeviceThermostatIcon /> <Typography>C°</Typography>
+								</>
+							) : (
+								<>
+									<DeviceThermostatIcon />
+									<Typography>F°</Typography>
+								</>
+							)}
+						</IconButton>
+
+						<IconButton sx={{ mr: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+							{theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+						</IconButton>
+
 						<Tooltip title="open menu">
 							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
 								<Avatar alt="N" src="/static/images/avatar/2.jpg" />
@@ -106,9 +191,6 @@ function ResponsiveAppBar() {
 								</MenuItem>
 							))}
 						</Menu>
-						<IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-							{theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
-						</IconButton>
 					</Box>
 				</Toolbar>
 			</Container>
