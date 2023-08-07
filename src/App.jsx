@@ -3,48 +3,40 @@ import { Routes, Route } from "react-router-dom";
 
 import "./App.css";
 
-import { getDesignTokens } from "./utils/theme";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDarkMode } from "./store/settingsSlice";
+import { getDesignTokens } from "./data/theme";
 
 import { Container, CssBaseline } from "@mui/material";
-
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ResponsiveAppBar from "./layouts/ResponsiveAppBar";
 
-import { ColorModeContext } from "./context/ThemeContext";
 import Home from "./pages/Home";
 import Trip from "./pages/Trip";
 
 function App() {
+	const dispatch = useDispatch();
+
 	// const [user, setUser] = useState("");
 
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-	const [mode, setMode] = useState(prefersDarkMode ? "dark" : "light");
+	const darkMode = useSelector((state) => state.settings.darkMode);
+	!prefersDarkMode && darkMode && dispatch(toggleDarkMode());
 
-	const colorMode = useMemo(
-		() => ({
-			toggleColorMode: () => {
-				setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
-			},
-		}),
-		[]
-	);
-
-	const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+	const theme = useMemo(() => createTheme(getDesignTokens(darkMode ? "dark" : "light")), [darkMode]);
 
 	return (
-		<ColorModeContext.Provider value={colorMode}>
-			<ThemeProvider theme={theme}>
-				<CssBaseline enableColorScheme />
-				<ResponsiveAppBar></ResponsiveAppBar>
-				<Container sx={{ maxWidth: 900, marginTop: 5 }}>
-					<Routes>
-						<Route path="/" element={<Home />} />
-						<Route path="/trip" element={<Trip />} />
-					</Routes>
-				</Container>
-			</ThemeProvider>
-		</ColorModeContext.Provider>
+		<ThemeProvider theme={theme}>
+			<CssBaseline enableColorScheme />
+			<ResponsiveAppBar></ResponsiveAppBar>
+			<Container sx={{ maxWidth: 900, marginTop: 5 }}>
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="/trip" element={<Trip />} />
+				</Routes>
+			</Container>
+		</ThemeProvider>
 	);
 }
 

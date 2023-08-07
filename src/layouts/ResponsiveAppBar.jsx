@@ -1,6 +1,8 @@
-import { useTheme } from "@mui/material/styles";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDarkMode, toggleTemperatureUnit } from "../store/settingsSlice";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -12,15 +14,13 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
 
 import CycloneIcon from "@mui/icons-material/Cyclone";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import MenuIcon from "@mui/icons-material/Menu";
 import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
-
-import { ColorModeContext } from "../context/ThemeContext";
-import { Button } from "@mui/material";
 
 const userMenu = ["preferences", "logout"];
 const pages = [
@@ -29,8 +29,7 @@ const pages = [
 ];
 
 function ResponsiveAppBar() {
-	const theme = useTheme();
-	const colorMode = useContext(ColorModeContext);
+	const dispatch = useDispatch();
 
 	const [anchorElNav, setAnchorElNav] = useState(null);
 	const handleOpenNavMenu = (event) => {
@@ -48,9 +47,11 @@ function ResponsiveAppBar() {
 		setAnchorElUser(null);
 	};
 
-	//TODO
-	const preferences = { temperature: "C" };
-	const toggleTemperature = () => {};
+	const darkMode = useSelector((state) => state.settings.darkMode);
+	const handleColorModeChange = () => dispatch(toggleDarkMode());
+
+	const temperatureUnit = useSelector((state) => state.settings.temperatureUnit);
+	const handleTemperatureUnitChange = () => dispatch(toggleTemperatureUnit());
 
 	return (
 		<AppBar position="static" color="primary">
@@ -128,21 +129,14 @@ function ResponsiveAppBar() {
 					</Typography>
 
 					<Box sx={{ flexGrow: 0 }}>
-						<IconButton onClick={toggleTemperature} color="inherit">
-							{preferences.temperature === "C" ? (
-								<>
-									<DeviceThermostatIcon /> <Typography>C°</Typography>
-								</>
-							) : (
-								<>
-									<DeviceThermostatIcon />
-									<Typography>F°</Typography>
-								</>
-							)}
+						<IconButton onClick={handleTemperatureUnitChange} color="inherit">
+							<>
+								<DeviceThermostatIcon /> <Typography>°{temperatureUnit}</Typography>
+							</>
 						</IconButton>
 
-						<IconButton sx={{ mr: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-							{theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+						<IconButton sx={{ mr: 1 }} onClick={handleColorModeChange} color="inherit">
+							{darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
 						</IconButton>
 
 						<Tooltip title="open menu">
