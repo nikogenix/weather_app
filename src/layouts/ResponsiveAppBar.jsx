@@ -16,11 +16,12 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 
-import CycloneIcon from "@mui/icons-material/Cyclone";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import MenuIcon from "@mui/icons-material/Menu";
 import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
+import SearchForm from "../features/search/SearchForm";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const userMenu = ["preferences", "logout"];
 const pages = [
@@ -28,7 +29,7 @@ const pages = [
 	{ name: "plan a trip", path: "/trip" },
 ];
 
-function ResponsiveAppBar() {
+const ResponsiveAppBar = () => {
 	const dispatch = useDispatch();
 
 	const [anchorElNav, setAnchorElNav] = useState(null);
@@ -47,6 +48,15 @@ function ResponsiveAppBar() {
 		setAnchorElUser(null);
 	};
 
+	const [anchorElSettings, setAnchorElSettings] = useState(null);
+
+	const handleOpenSettingsMenu = (event) => {
+		setAnchorElSettings(event.currentTarget);
+	};
+	const handleCloseSettingsMenu = () => {
+		setAnchorElSettings(null);
+	};
+
 	const darkMode = useSelector((state) => state.settings.darkMode);
 	const handleColorModeChange = () => dispatch(toggleDarkMode());
 
@@ -57,7 +67,7 @@ function ResponsiveAppBar() {
 		<AppBar position="static" color="primary">
 			<Container maxWidth="xl">
 				<Toolbar disableGutters>
-					<Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+					<Box sx={{ flexGrow: 2, display: { xs: "flex", md: "none" } }}>
 						<IconButton
 							size="large"
 							aria-label="account of current user"
@@ -94,7 +104,7 @@ function ResponsiveAppBar() {
 						</Menu>
 					</Box>
 
-					<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+					<Box sx={{ flexGrow: 2, display: { xs: "none", md: "flex" } }}>
 						{pages.map((page) => (
 							<Button
 								key={page.name}
@@ -108,27 +118,11 @@ function ResponsiveAppBar() {
 						))}
 					</Box>
 
-					<CycloneIcon sx={{ display: "flex", mr: 1 }} />
-					<Typography
-						variant="h5"
-						noWrap
-						component="a"
-						href=""
-						sx={{
-							mr: 2,
-							display: "flex",
-							fontFamily: "monospace",
-							fontWeight: 700,
-							letterSpacing: ".3rem",
-							color: "inherit",
-							textDecoration: "none",
-							flexGrow: 1,
-						}}
-					>
-						weather
-					</Typography>
+					<Box sx={{ display: "flex", mr: 1, flexGrow: 2, flexShrink: 2 }}>
+						<SearchForm />
+					</Box>
 
-					<Box sx={{ flexGrow: 0 }}>
+					<Box sx={{ flexGrow: 0, flexShrink: 0, display: { xs: "none", sm: "flex" } }}>
 						<IconButton onClick={handleTemperatureUnitChange} color="inherit">
 							<>
 								<DeviceThermostatIcon /> <Typography>°{temperatureUnit}</Typography>
@@ -167,9 +161,71 @@ function ResponsiveAppBar() {
 							))}
 						</Menu>
 					</Box>
+
+					<Box sx={{ flexGrow: 0, flexShrink: 0, display: { xs: "flex", sm: "none" } }}>
+						<Tooltip title="open settings">
+							<IconButton onClick={handleOpenSettingsMenu} sx={{ p: 0 }}>
+								<SettingsIcon />
+							</IconButton>
+						</Tooltip>
+						<Menu
+							sx={{ mt: "45px" }}
+							id="mobile-menu-appbar"
+							anchorEl={anchorElSettings}
+							anchorOrigin={{
+								vertical: "top",
+								horizontal: "left",
+							}}
+							keepMounted
+							transformOrigin={{
+								vertical: "top",
+								horizontal: "left",
+							}}
+							open={Boolean(anchorElSettings)}
+							onClose={handleCloseSettingsMenu}
+						>
+							<IconButton onClick={handleTemperatureUnitChange} color="inherit">
+								<>
+									<DeviceThermostatIcon /> <Typography>°{temperatureUnit}</Typography>
+								</>
+							</IconButton>
+
+							<IconButton sx={{ mr: 1 }} onClick={handleColorModeChange} color="inherit">
+								{darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+							</IconButton>
+
+							<Tooltip title="open menu">
+								<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+									<Avatar alt="N" src="/static/images/avatar/2.jpg" />
+								</IconButton>
+							</Tooltip>
+							<Menu
+								sx={{ mt: "45px" }}
+								id="menu-appbar"
+								anchorEl={anchorElUser}
+								anchorOrigin={{
+									vertical: "top",
+									horizontal: "left",
+								}}
+								keepMounted
+								transformOrigin={{
+									vertical: "top",
+									horizontal: "left",
+								}}
+								open={Boolean(anchorElUser)}
+								onClose={handleCloseUserMenu}
+							>
+								{userMenu.map((setting) => (
+									<MenuItem key={setting} onClick={handleCloseUserMenu}>
+										<Typography textAlign="center">{setting}</Typography>
+									</MenuItem>
+								))}
+							</Menu>
+						</Menu>
+					</Box>
 				</Toolbar>
 			</Container>
 		</AppBar>
 	);
-}
+};
 export default ResponsiveAppBar;
