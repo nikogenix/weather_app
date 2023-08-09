@@ -1,11 +1,15 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import Stack from "@mui/material/Stack";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+
 import EventIcon from "@mui/icons-material/Event";
-import { IconButton } from "@mui/material";
+import Stack from "@mui/material/Stack";
+import IconButton from "@mui/material/IconButton";
+
+import { setDate } from "../searchSlice";
 
 function ButtonField(props) {
 	const { setOpen, id, disabled, InputProps: { ref } = {}, inputProps: { "aria-label": ariaLabel } = {} } = props;
@@ -40,12 +44,22 @@ function ButtonDatePicker(props) {
 }
 
 export default function PickerWithButtonField() {
-	const [value, setValue] = React.useState(null);
+	const dispatch = useDispatch();
+
+	const { date } = useSelector((state) => state.search);
+
+	const handleDateChange = (newDate) => {
+		dispatch(setDate(new Date(newDate).toString()));
+	};
+
+	React.useEffect(() => {
+		handleDateChange(Date.now());
+	}, []);
 
 	return (
 		<LocalizationProvider dateAdapter={AdapterDayjs}>
 			<Stack spacing={1}>
-				<ButtonDatePicker value={value} onChange={(newValue) => setValue(newValue)} />
+				<ButtonDatePicker value={date} onChange={handleDateChange} />
 			</Stack>
 		</LocalizationProvider>
 	);

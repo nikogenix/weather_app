@@ -4,7 +4,7 @@ const searchSlice = createSlice({
 	name: "search",
 	initialState: {
 		location: "",
-		date: "new Date(),",
+		date: "",
 	},
 	reducers: {
 		setLocation: (state, action) => {
