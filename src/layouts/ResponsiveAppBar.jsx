@@ -64,7 +64,7 @@ const ResponsiveAppBar = () => {
 	const handleTemperatureUnitChange = () => dispatch(toggleTemperatureUnit());
 
 	return (
-		<AppBar position="static" color="primary">
+		<AppBar position="sticky" color="primary">
 			<Container maxWidth="xl">
 				<Toolbar disableGutters>
 					<Box sx={{ flexGrow: 2, display: { xs: "flex", md: "none" } }}>
@@ -90,6 +90,7 @@ const ResponsiveAppBar = () => {
 								vertical: "top",
 								horizontal: "left",
 							}}
+							disableScrollLock={true}
 							open={Boolean(anchorElNav)}
 							onClose={handleCloseNavMenu}
 							sx={{
@@ -151,6 +152,7 @@ const ResponsiveAppBar = () => {
 								vertical: "top",
 								horizontal: "left",
 							}}
+							disableScrollLock={true}
 							open={Boolean(anchorElUser)}
 							onClose={handleCloseUserMenu}
 						>
@@ -181,6 +183,7 @@ const ResponsiveAppBar = () => {
 								vertical: "top",
 								horizontal: "left",
 							}}
+							disableScrollLock={true}
 							open={Boolean(anchorElSettings)}
 							onClose={handleCloseSettingsMenu}
 						>
@@ -212,6 +215,7 @@ const ResponsiveAppBar = () => {
 									vertical: "top",
 									horizontal: "left",
 								}}
+								disableScrollLock={true}
 								open={Boolean(anchorElUser)}
 								onClose={handleCloseUserMenu}
 							>
@@ -228,4 +232,5 @@ const ResponsiveAppBar = () => {
 		</AppBar>
 	);
 };
+
 export default ResponsiveAppBar;

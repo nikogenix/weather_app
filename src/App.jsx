@@ -14,6 +14,7 @@ import ResponsiveAppBar from "./layouts/ResponsiveAppBar";
 
 import Home from "./pages/Home";
 import Trip from "./pages/Trip";
+import SlidingFooter from "./layouts/SlidingFooter";
 
 function App() {
 	const dispatch = useDispatch();
@@ -36,6 +37,7 @@ function App() {
 					<Route path="/trip" element={<Trip />} />
 				</Routes>
 			</Container>
+			<SlidingFooter></SlidingFooter>
 		</ThemeProvider>
 	);
 }
