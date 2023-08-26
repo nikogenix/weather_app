@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { AppBar, Typography, Link, Divider, Toolbar, Slide } from "@mui/material";
 
 import useScrollTrigger from "@mui/material/useScrollTrigger";
+import { useLocation } from "react-router-dom";
 
 function HideOnScroll(props) {
 	const { children } = props;
@@ -35,11 +36,25 @@ function HideOnScroll(props) {
 }
 
 const SlidingFooter = (props) => {
+	const location = useLocation();
+	const [isShortPage, setIsShortPage] = useState(true);
+
+	useEffect(() => {
+		const checkPageHeight = () => {
+			setIsShortPage(document.documentElement.scrollHeight <= window.innerHeight);
+		};
+
+		window.addEventListener("resize", checkPageHeight);
+		checkPageHeight();
+
+		return () => window.removeEventListener("resize", checkPageHeight);
+	}, [location.key]);
+
 	return (
 		<HideOnScroll {...props}>
 			<AppBar
 				component="footer"
-				position="sticky"
+				position={isShortPage ? "absolute" : "sticky"}
 				color="primary"
 				sx={{ top: "auto", bottom: 0, display: "flex", flexDirection: "column" }}
 			>
