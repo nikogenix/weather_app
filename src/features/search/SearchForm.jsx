@@ -1,34 +1,16 @@
-import { useSelector, useDispatch } from "react-redux";
-import { setLocation } from "./searchSlice";
-import { Divider, IconButton, InputBase, Paper } from "@mui/material";
+import { Divider, IconButton, Paper } from "@mui/material";
 
 import BookmarksIcon from "@mui/icons-material/Bookmarks";
 import SearchIcon from "@mui/icons-material/Search";
 import CombinedPicker from "./components/CustomDatePicker";
-import getLocations from "../../services/getLocations";
 import AutocompleteInput from "./components/AutocompleteInput";
 
 const SearchForm = () => {
-	const dispatch = useDispatch();
-	const { location } = useSelector((state) => state.search);
-
-	const handleLocationChange = (event) => {
-		dispatch(setLocation(event.target.value));
-		getLocations(event.target.value);
-	};
-
 	return (
-		<Paper component="form" sx={{ p: "2px 4px", display: "flex", alignItems: "center", maxWidth: 400 }}>
-			<CombinedPicker />
+		<Paper component="div" sx={{ p: "2px 4px", display: "flex", alignItems: "center", maxWidth: 400 }}>
+			<CombinedPicker></CombinedPicker>
 
 			<Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-
-			{/* <InputBase
-				sx={{ ml: 1, flex: 1 }}
-				inputProps={{ "aria-label": "search for a location" }}
-				value={location}
-				onChange={handleLocationChange}
-			/> */}
 
 			<AutocompleteInput></AutocompleteInput>
 

@@ -1,17 +1,27 @@
 import * as React from "react";
+
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+
 import { debounce } from "@mui/material/utils";
 import getLocations from "../../../services/getLocations";
+import { setLocation } from "../searchSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function AutocompleteInput() {
-	const [value, setValue] = React.useState(null);
 	const [inputValue, setInputValue] = React.useState("");
 	const [options, setOptions] = React.useState([]);
+
+	const dispatch = useDispatch();
+	const { location } = useSelector((state) => state.search);
+
+	const handleLocationChange = (newValue) => {
+		if (newValue !== null) dispatch(setLocation(newValue));
+	};
 
 	const fetch = React.useMemo(
 		() =>
@@ -24,41 +34,36 @@ export default function AutocompleteInput() {
 
 	React.useEffect(() => {
 		if (inputValue === "") {
-			setOptions(value ? [value] : []);
+			setOptions([]);
 			return;
 		}
 
 		fetch({ input: inputValue }, (results) => {
 			let newOptions = [];
 
-			if (value) {
-				newOptions = [value];
-			}
-
 			if (results) {
-				newOptions = [...newOptions, ...results];
+				newOptions = [...results];
 			}
 
 			setOptions(newOptions);
 		});
-
-		console.log(value, inputValue);
-	}, [value, inputValue, fetch]);
+	}, [location, inputValue, fetch]);
 
 	return (
 		<Autocomplete
 			sx={{ width: 300, ml: 1, flex: 1 }}
-			getOptionLabel={(option) => option.name}
+			getOptionLabel={(option) => (typeof option === "string" ? option : option.name)}
 			filterOptions={(x) => x}
 			options={options}
 			autoComplete
 			includeInputInList
 			filterSelectedOptions
-			value={value}
-			noOptionsText="search for a location..."
+			clearOnBlur={false}
+			value={location}
+			inputValue={inputValue}
+			freeSolo
 			onChange={(event, newValue) => {
-				setOptions(newValue ? [newValue, ...options] : options);
-				setValue(newValue);
+				handleLocationChange(newValue);
 			}}
 			onInputChange={(event, newInputValue) => {
 				setInputValue(newInputValue);

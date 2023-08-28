@@ -11,7 +11,7 @@ const searchSlice = createSlice({
 			state.location = action.payload;
 		},
 		setDate: (state, action) => {
-			state.selectedDate = action.payload;
+			state.date = action.payload;
 		},
 	},
 });

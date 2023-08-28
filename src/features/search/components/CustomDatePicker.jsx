@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -46,20 +46,19 @@ function ButtonDatePicker(props) {
 export default function PickerWithButtonField() {
 	const dispatch = useDispatch();
 
-	const { date } = useSelector((state) => state.search);
-
 	const handleDateChange = (newDate) => {
 		dispatch(setDate(new Date(newDate).toString()));
 	};
 
 	React.useEffect(() => {
 		handleDateChange(Date.now());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
 		<LocalizationProvider dateAdapter={AdapterDayjs}>
 			<Stack spacing={1}>
-				<ButtonDatePicker value={date} onChange={handleDateChange} />
+				<ButtonDatePicker onChange={handleDateChange} />
 			</Stack>
 		</LocalizationProvider>
 	);
