@@ -1,47 +1,239 @@
 import { useSelector } from "react-redux";
 
-import { Box, Card, CardContent, CardHeader, Typography } from "@mui/material";
-import CloudIcon from "@mui/icons-material/Cloud";
+import { Box, Card, CardContent, CardHeader, Icon, Typography } from "@mui/material";
 import WeatherDetail from "./components/WeatherDetail";
+
+import "../../assets/css/weather-icons.min.css";
+import "../../assets/css/weather-icons-wind.min.css";
+
+const WEATHER_CODES = {
+	0: {
+		description: "clear sky",
+		dayIcon: "wi-day-sunny",
+		nightIcon: "wi-night-clear",
+	},
+	1: {
+		description: "mainly clear",
+		dayIcon: "wi-day-sunny-overcast",
+		nightIcon: "wi-night-alt-partly-cloudy",
+	},
+	2: {
+		description: "partly cloudy",
+		dayIcon: "wi-day-cloudy",
+		nightIcon: "wi-night-alt-cloudy",
+	},
+	3: {
+		description: "overcast",
+		dayIcon: "wi-cloudy",
+		nightIcon: "wi-cloudy",
+	},
+	45: {
+		description: "fog",
+		dayIcon: "wi-day-fog",
+		nightIcon: "wi-night-fog",
+	},
+	48: {
+		description: "depositing rime fog",
+		dayIcon: "wi-day-fog",
+		nightIcon: "wi-night-fog",
+	},
+	51: {
+		description: "drizzle: light intensity",
+		dayIcon: "wi-day-sprinkle",
+		nightIcon: "wi-night-alt-sprinkle",
+	},
+	53: {
+		description: "drizzle: moderate intensity",
+		dayIcon: "wi-day-sprinkle",
+		nightIcon: "wi-night-alt-sprinkle",
+	},
+	55: {
+		description: "drizzle: dense intensity",
+		dayIcon: "wi-day-sprinkle",
+		nightIcon: "wi-night-alt-sprinkle",
+	},
+	56: {
+		description: "freezing drizzle: light intensity",
+		dayIcon: "wi-day-sprinkle",
+		nightIcon: "wi-night-alt-sprinkle",
+	},
+	57: {
+		description: "freezing drizzle: dense intensity",
+		dayIcon: "wi-day-sprinkle",
+		nightIcon: "wi-night-alt-sprinkle",
+	},
+	61: {
+		description: "rain: slight intensity",
+		dayIcon: "wi-day-rain-mix",
+		nightIcon: "wi-night-alt-rain-mix",
+	},
+	63: {
+		description: "rain: moderate intensity",
+		dayIcon: "wi-day-rain",
+		nightIcon: "wi-night-alt-rain",
+	},
+	65: {
+		description: "rain: heavy intensity",
+		dayIcon: "wi-day-rain-wind",
+		nightIcon: "wi-night-alt-rain-wind",
+	},
+	66: {
+		description: "freezing rain: light intensity",
+		dayIcon: "wi-day-sleet",
+		nightIcon: "wi-night-alt-sleet",
+	},
+	67: {
+		description: "freezing rain: heavy intensity",
+		dayIcon: "wi-day-sleet",
+		nightIcon: "wi-night-alt-sleet",
+	},
+	71: {
+		description: "snow fall: slight intensity",
+		dayIcon: "wi-day-snow",
+		nightIcon: "wi-night-snow",
+	},
+	73: {
+		description: "snow fall: moderate intensity",
+		dayIcon: "wi-day-snow",
+		nightIcon: "wi-night-snow",
+	},
+	75: {
+		description: "snow fall: heavy intensity",
+		dayIcon: "wi-day-snow-wind",
+		nightIcon: "wi-night-snow-wind",
+	},
+	77: {
+		description: "snow grains",
+		dayIcon: "wi-day-snow",
+		nightIcon: "wi-night-snow",
+	},
+	80: {
+		description: "rain showers: slight intensity",
+		dayIcon: "wi-day-showers",
+		nightIcon: "wi-night-alt-showers",
+	},
+	81: {
+		description: "rain showers: moderate intensity",
+		dayIcon: "wi-day-showers",
+		nightIcon: "wi-night-alt-showers",
+	},
+	82: {
+		description: "rain showers: violent intensity",
+		dayIcon: "wi-day-showers",
+		nightIcon: "wi-night-alt-showers",
+	},
+	85: {
+		description: "snow showers: slight intensity",
+		dayIcon: "wi-day-snow",
+		nightIcon: "wi-night-alt-snow",
+	},
+	86: {
+		description: "snow showers: heavy intensity",
+		dayIcon: "wi-day-snow-wind",
+		nightIcon: "wi-night-alt-snow-wind",
+	},
+	95: {
+		description: "thunderstorm: slight or moderate",
+		dayIcon: "wi-day-thunderstorm",
+		nightIcon: "wi-night-alt-thunderstorm",
+	},
+	96: {
+		description: "thunderstorm with slight hail",
+		dayIcon: "wi-day-snow-thunderstorm",
+		nightIcon: "wi-night-snow-thunderstorm",
+	},
+	99: {
+		description: "thunderstorm with heavy hail",
+		dayIcon: "wi-day-snow-thunderstorm",
+		nightIcon: "wi-night-snow-thunderstorm",
+	},
+};
 
 const WeatherPanel = () => {
 	const { data } = useSelector((state) => state.weather);
 	const weatherWarning = true;
 
-	const header = "Temperature";
-	const subheader = "25°C";
+	const currentWeatherTime = Number(data.current_weather.time.slice(11, 13));
+
+	if (Object.getOwnPropertyNames(data).length === 0) return <></>;
 
 	return (
 		<Card>
 			<Box sx={{ display: "flex", justifyContent: "space-between" }}>
-				<CardHeader title="current weather" subheader="13:57" />
-				{weatherWarning && <CardHeader title="warning" subheader="heavy rain" />}
+				<CardHeader
+					title="current weather"
+					subheader={
+						/^[+-]\d+$/.test(data.timezone_abbreviation)
+							? `${data.current_weather.time.slice(-5)} UTC${data.timezone_abbreviation}`
+							: `${data.current_weather.time.slice(-5)} ${data.timezone_abbreviation}`
+					}
+				/>
+				{weatherWarning && <CardHeader title="warning" subheader="WIP" />}
 			</Box>
 
 			<CardContent sx={{ display: "flex", justifyContent: "space-around" }}>
 				<Box sx={{ display: "flex" }}>
-					<Box>
-						<CloudIcon sx={{ fontSize: 80, ml: 5, mr: 5 }}></CloudIcon>
-						<Typography>mostly cloudy</Typography>
+					<Box sx={{ display: "flex", justifyItems: "center", flexFlow: "column", alignItems: "center" }}>
+						<Icon
+							component="i"
+							sx={{ fontSize: 80, margin: 5, overflow: "visible", width: "min-content" }}
+							baseClassName={`wi ${
+								data.current_weather.is_day
+									? WEATHER_CODES[data.current_weather.weathercode].dayIcon
+									: WEATHER_CODES[data.current_weather.weathercode].nightIcon
+							}`}
+						></Icon>
+
+						<Typography>{WEATHER_CODES[data.current_weather.weathercode].description}</Typography>
 					</Box>
 					<Box>
-						<Typography fontSize={50}>23°C</Typography>
-						<Typography>feels like 23°C</Typography>
+						<Typography fontSize={50}>
+							{data.current_weather.temperature}
+							{data.hourly_units.temperature_2m}
+						</Typography>
+						<Typography>
+							feels like {data.hourly.apparent_temperature[currentWeatherTime]}
+							{data.hourly_units.temperature_2m}
+						</Typography>
 					</Box>
 				</Box>
 
 				<Box sx={{ display: "flex", justifyContent: "space-around" }}>
 					<Box sx={{ mr: 10 }}>
-						<WeatherDetail header="air quality" subheader="67" />
-						<WeatherDetail header="wind" subheader="1 km/h" />
-						<WeatherDetail header="humidity" subheader="54%" />
-						<WeatherDetail header="visibility" subheader="10 km" />
+						<WeatherDetail
+							header="air quality"
+							subheader={`${data.aqi.hourly.european_aqi[currentWeatherTime]} (${data.aqi.hourly_units.european_aqi})`}
+						/>
+						<WeatherDetail
+							header="wind"
+							subheader={`${data.current_weather.windspeed} ${data.daily_units.windspeed_10m_max}`}
+						/>
+						{/* WIP wind direction icon */}
+						<WeatherDetail
+							header="humidity"
+							subheader={`${data.hourly.relativehumidity_2m[currentWeatherTime]}%`}
+						/>
+						<WeatherDetail
+							header="visibility"
+							subheader={`${data.hourly.visibility[currentWeatherTime].toFixed(0)} ${
+								data.hourly_units.visibility
+							}`}
+						/>
 					</Box>
 					<Box>
-						<WeatherDetail header="UV index" subheader="0" />
-						<WeatherDetail header="pressure" subheader="1008 mb" />
-						<WeatherDetail header="dew point" subheader="12°" />
-						<WeatherDetail header="precipitation chance" subheader="0%" />
+						<WeatherDetail header="UV index" subheader={data.hourly.uv_index[currentWeatherTime]} />
+						<WeatherDetail
+							header="surface pressure"
+							subheader={`${data.hourly.surface_pressure[currentWeatherTime]} ${data.hourly_units.surface_pressure}`}
+						/>
+						<WeatherDetail
+							header="dew point"
+							subheader={`${data.hourly.dewpoint_2m[currentWeatherTime]}${data.hourly_units.dewpoint_2m}`}
+						/>
+						<WeatherDetail
+							header="precipitation chance"
+							subheader={`${data.hourly.precipitation_probability[currentWeatherTime]}%`}
+						/>
 					</Box>
 				</Box>
 			</CardContent>

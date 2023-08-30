@@ -15,10 +15,10 @@ const SearchForm = () => {
 	const { temperatureUnit } = useSelector((state) => state.settings);
 
 	const handleClick = async () => {
-		const data = await getWeather(date, location, temperatureUnit);
+		const { data, aqi } = await getWeather(date, location, temperatureUnit);
 		console.log(data);
 		console.log(location);
-		dispatch(setWeather({ ...data, location }));
+		dispatch(setWeather({ ...data, location, aqi }));
 	};
 
 	return (
