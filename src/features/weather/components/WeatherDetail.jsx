@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
 
-const WeatherDetail = ({ header, subheader, layout }) => {
+const WeatherDetail = ({ header, subheader }) => {
 	return (
-		<Box>
-			<Typography sx={{ fontWeight: "bold" }} color="primary">
+		<Box sx={{ height: 66, width: "100%" }}>
+			<Typography variant="subtitle2" sx={{ fontWeight: "bold", fontSize: 14 }} color="primary">
 				{header}
 			</Typography>
 			<Typography>{subheader}</Typography>

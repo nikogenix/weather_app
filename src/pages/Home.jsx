@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
-import WeatherPanel from "../features/weather/WeatherPanel";
+import Weather from "../features/weather";
 
 const Home = () => {
 	return (
 		<>
-			<WeatherPanel></WeatherPanel>
+			<Weather></Weather>
 			<Box sx={{ my: 2 }}>
 				{[...new Array(24)]
 					.map(

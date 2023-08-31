@@ -51,7 +51,7 @@ export default function AutocompleteInput() {
 
 	return (
 		<Autocomplete
-			sx={{ width: 300, ml: 1, flex: 1 }}
+			sx={{ width: { xs: 125, sm: 185, md: 300 }, ml: 1, flex: 1, border: "none" }}
 			getOptionLabel={(option) => (typeof option === "string" ? option : option.name)}
 			filterOptions={(x) => x}
 			options={options}
@@ -68,7 +68,7 @@ export default function AutocompleteInput() {
 			onInputChange={(event, newInputValue) => {
 				setInputValue(newInputValue);
 			}}
-			renderInput={(params) => <TextField {...params} fullWidth />}
+			renderInput={(params) => <TextField {...params} variant="standard" fullWidth />}
 			renderOption={(props, option) => {
 				return (
 					<li {...props} key={option.id}>

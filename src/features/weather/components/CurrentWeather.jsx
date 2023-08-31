@@ -1,10 +1,10 @@
 import { useSelector } from "react-redux";
 
 import { Box, Card, CardContent, CardHeader, Icon, Typography } from "@mui/material";
-import WeatherDetail from "./components/WeatherDetail";
+import WeatherDetail from "./WeatherDetail";
 
-import "../../assets/css/weather-icons.min.css";
-import "../../assets/css/weather-icons-wind.min.css";
+import "../../../assets/css/weather-icons.min.css";
+import "../../../assets/css/weather-icons-wind.min.css";
 
 const WEATHER_CODES = {
 	0: {
@@ -149,17 +149,23 @@ const WEATHER_CODES = {
 	},
 };
 
-const WeatherPanel = () => {
+const CurrentWeather = () => {
 	const { data } = useSelector((state) => state.weather);
 	const weatherWarning = true;
 
-	const currentWeatherTime = Number(data.current_weather.time.slice(11, 13));
+	const currentWeatherTime = data.current_weather ? Number(data.current_weather.time.slice(11, 13)) : 0;
 
 	if (Object.getOwnPropertyNames(data).length === 0) return <></>;
 
 	return (
-		<Card>
-			<Box sx={{ display: "flex", justifyContent: "space-between" }}>
+		<Card sx={{ display: "flex", flexDirection: "column" }}>
+			{/* headers */}
+			<Box
+				sx={{
+					display: "flex",
+					justifyContent: "space-between",
+				}}
+			>
 				<CardHeader
 					title="current weather"
 					subheader={
@@ -167,30 +173,65 @@ const WeatherPanel = () => {
 							? `${data.current_weather.time.slice(-5)} UTC${data.timezone_abbreviation}`
 							: `${data.current_weather.time.slice(-5)} ${data.timezone_abbreviation}`
 					}
+					titleTypographyProps={{ fontSize: 20 }}
+					subheaderTypographyProps={{ fontSize: 15 }}
+					sx={{ width: "50%", pt: 3, pl: 3 }}
 				/>
-				{weatherWarning && <CardHeader title="warning" subheader="WIP" />}
+				{weatherWarning && (
+					<CardHeader
+						title="warning"
+						subheader="WIP"
+						titleTypographyProps={{ fontSize: 20, textAlign: "right" }}
+						subheaderTypographyProps={{ fontSize: 15, textAlign: "right" }}
+						sx={{ width: "50%", pt: 3, pr: 3 }}
+					/>
+				)}
 			</Box>
 
-			<CardContent sx={{ display: "flex", justifyContent: "space-around" }}>
-				<Box sx={{ display: "flex" }}>
-					<Box sx={{ display: "flex", justifyItems: "center", flexFlow: "column", alignItems: "center" }}>
+			{/* weather */}
+			<CardContent
+				sx={{
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "space-around",
+					flexDirection: "column",
+					width: "100%",
+					maxWidth: 400,
+					alignSelf: "left",
+				}}
+			>
+				{/* icon and temperature */}
+				<Box
+					sx={{
+						display: "flex",
+						alignItems: "center",
+						justifyItems: "center",
+					}}
+				>
+					<Box
+						sx={{
+							display: "flex",
+							justifyItems: "center",
+							flexFlow: "column",
+							alignItems: "center",
+						}}
+					>
 						<Icon
 							component="i"
-							sx={{ fontSize: 80, margin: 5, overflow: "visible", width: "min-content" }}
+							sx={{ fontSize: 80, overflow: "visible", width: "min-content" }}
 							baseClassName={`wi ${
 								data.current_weather.is_day
 									? WEATHER_CODES[data.current_weather.weathercode].dayIcon
 									: WEATHER_CODES[data.current_weather.weathercode].nightIcon
 							}`}
 						></Icon>
-
-						<Typography>{WEATHER_CODES[data.current_weather.weathercode].description}</Typography>
 					</Box>
-					<Box>
-						<Typography fontSize={50}>
+					<Box sx={{ m: 3 }}>
+						<Typography fontSize={40}>
 							{data.current_weather.temperature}
 							{data.hourly_units.temperature_2m}
 						</Typography>
+						<Typography>{WEATHER_CODES[data.current_weather.weathercode].description}</Typography>
 						<Typography>
 							feels like {data.hourly.apparent_temperature[currentWeatherTime]}
 							{data.hourly_units.temperature_2m}
@@ -198,8 +239,16 @@ const WeatherPanel = () => {
 					</Box>
 				</Box>
 
-				<Box sx={{ display: "flex", justifyContent: "space-around" }}>
-					<Box sx={{ mr: 10 }}>
+				{/* weather details */}
+				<Box
+					sx={{
+						display: "flex",
+						justifyContent: "center",
+						width: { xs: "100%", sm: "100%" },
+						mt: { xs: 3, sm: 0 },
+					}}
+				>
+					<Box sx={{ mr: 1, width: "40%" }}>
 						<WeatherDetail
 							header="air quality"
 							subheader={`${data.aqi.hourly.european_aqi[currentWeatherTime]} (${data.aqi.hourly_units.european_aqi})`}
@@ -220,7 +269,8 @@ const WeatherPanel = () => {
 							}`}
 						/>
 					</Box>
-					<Box>
+
+					<Box sx={{ textAlign: "right", ml: 1, width: "40%" }}>
 						<WeatherDetail header="UV index" subheader={data.hourly.uv_index[currentWeatherTime]} />
 						<WeatherDetail
 							header="surface pressure"
@@ -241,4 +291,4 @@ const WeatherPanel = () => {
 	);
 };
 
-export default WeatherPanel;
+export default CurrentWeather;
