@@ -36,30 +36,46 @@ const getWeather = async (date, location, temperatureUnit) => {
 		const { latitude, longitude } = location;
 		const units = temperatureUnit === "C" ? paramsForC : paramsForF;
 
+		const startDate = new Date(date);
+		const endDate = new Date();
+		endDate.setDate(endDate.getDate() + 16);
+		const endDateAqi = new Date();
+		endDateAqi.setDate(endDateAqi.getDate() + 5);
+
 		const queryParams = new URLSearchParams({
 			latitude,
 			longitude,
 			...paramsForWeather,
 			...units,
+			start_date: startDate.toISOString().split("T")[0], // YYYY-MM-DD
+			end_date: endDate.toISOString().split("T")[0], // YYYY-MM-DD
 		});
 
 		const url = `${BASE_URL}?${queryParams.toString()}`;
 
-		const aqiQueryParams = new URLSearchParams({
-			latitude,
-			longitude,
-			...paramsForAqi,
-		});
+		// Check if there is at least 1 day of data for AQI
+		if (endDateAqi >= startDate) {
+			const aqiQueryParams = new URLSearchParams({
+				latitude,
+				longitude,
+				...paramsForAqi,
+				start_date: startDate.toISOString().split("T")[0], // YYYY-MM-DD
+				end_date: endDateAqi.toISOString().split("T")[0], // YYYY-MM-DD
+			});
 
-		const aqiUrl = `${AQI_URL}?${aqiQueryParams.toString()}`;
+			const aqiUrl = `${AQI_URL}?${aqiQueryParams.toString()}`;
 
-		const { data } = await axios.get(url);
-		const { data: aqi } = await axios.get(aqiUrl);
+			const { data } = await axios.get(url);
+			const { data: aqi } = await axios.get(aqiUrl);
 
-		console.log(aqiUrl);
-		console.log(aqi);
-		return { data, aqi };
+			console.log(aqi);
+			return { data, aqi };
+		} else {
+			// Handle the case where there's not enough data for AQI
+			console.log("Not enough data for AQI.");
+			const { data } = await axios.get(url);
+			return { data, aqi: { hourly: { european_aqi: [] } } }; // You can set aqi to null or handle it as needed
+		}
 	}
 };
-
 export default getWeather;

@@ -22,6 +22,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
 import SearchForm from "../features/search/SearchForm";
 import SettingsIcon from "@mui/icons-material/Settings";
+import getWeather from "../services/getWeather";
+import { setWeather } from "../features/weather/weatherSlice";
 
 const userMenu = ["preferences", "logout"];
 const pages = [
@@ -61,7 +63,15 @@ const ResponsiveAppBar = () => {
 	const handleColorModeChange = () => dispatch(toggleDarkMode());
 
 	const temperatureUnit = useSelector((state) => state.settings.temperatureUnit);
-	const handleTemperatureUnitChange = () => dispatch(toggleTemperatureUnit());
+	const { date, location } = useSelector((state) => state.search);
+	const handleTemperatureUnitChange = async () => {
+		dispatch(toggleTemperatureUnit());
+
+		const { data, aqi } = await getWeather(date, location, temperatureUnit === "C" ? "F" : "C");
+		console.log(data);
+		console.log(location);
+		dispatch(setWeather({ ...data, location, aqi }));
+	};
 
 	return (
 		<AppBar position="sticky" color="primary">

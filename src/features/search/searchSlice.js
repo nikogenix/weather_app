@@ -5,6 +5,7 @@ const searchSlice = createSlice({
 	initialState: {
 		location: "",
 		date: "",
+		dateChange: false,
 	},
 	reducers: {
 		setLocation: (state, action) => {
@@ -13,9 +14,12 @@ const searchSlice = createSlice({
 		setDate: (state, action) => {
 			state.date = action.payload;
 		},
+		setDateChange: (state, action) => {
+			state.dateChange = action.payload;
+		},
 	},
 });
 
-export const { setLocation, setDate } = searchSlice.actions;
+export const { setLocation, setDate, setDateChange } = searchSlice.actions;
 
 export default searchSlice.reducer;
