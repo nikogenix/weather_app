@@ -91,14 +91,14 @@
         -   [ ] option to select location on map
         -   [ ] date & time selection
             -   [x] choose current time by default
-            -   [ ] integrate date into API request
-            -   [ ] limit date range based on API availability
+            -   [x] integrate date into API request
+            -   [x] limit date range based on API availability
         -   [ ] display country flags
         -   [ ] search history
         -   [ ] bookmarked locations - save & remove
     -   [x] dark/light mode
     -   [x] unit preference (metric/imperial)
-        -   [ ] refetch API data upon changing the preference
+        -   [x] refetch API data upon changing the preference
     -   [ ] user menu
         -   [x] menu UI
         -   [ ] login/signup UI
@@ -134,6 +134,9 @@
     -   [ ] verify accessibility
     -   [ ] error handling
     -   [ ] testing
+    -   [ ] performance
+-   [ ] bugs
+    -   [ ] "Maximum update depth exceeded" warning in the clock from the date picker, when holding down the mouse and dragging for an extended amount of time
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
