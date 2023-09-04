@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import "./App.css";
+import "./assets/css/weather-icons.min.css";
+import "./assets/css/weather-icons-wind.min.css";
 
 import { useDispatch, useSelector } from "react-redux";
 import { toggleDarkMode } from "./store/settingsSlice";
