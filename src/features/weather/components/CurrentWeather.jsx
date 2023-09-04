@@ -21,8 +21,6 @@ const CurrentWeather = () => {
 		: data.current_weather.time.slice(11, 16);
 	const forecastStartIndex = Number(selectedTime.slice(0, 2));
 
-	console.log(forecastStartIndex);
-
 	return (
 		<Card sx={{ display: "flex", flexDirection: "column" }}>
 			{/* headers */}
@@ -93,9 +91,14 @@ const CurrentWeather = () => {
 							sx={{ fontSize: 80, overflow: "visible", width: "min-content" }}
 							baseClassName={`wi ${
 								data.hourly.is_day[forecastStartIndex]
-									? WEATHER_CODES[data.hourly.weathercode[forecastStartIndex]].dayIcon
-									: WEATHER_CODES[data.hourly.weathercode[forecastStartIndex]].nightIcon
+									? WEATHER_CODES[Number(data.hourly.weathercode[forecastStartIndex])].dayIcon
+									: WEATHER_CODES[Number(data.hourly.weathercode[forecastStartIndex])].nightIcon
 							}`}
+							aria-hidden={false}
+							aria-label={`weather icon: ${
+								WEATHER_CODES[Number(data.hourly.weathercode[forecastStartIndex])].description
+							}`}
+							role="img"
 						></Icon>
 					</Box>
 					<Box sx={{ m: 3 }}>
