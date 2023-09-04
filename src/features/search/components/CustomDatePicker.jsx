@@ -12,8 +12,8 @@ import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 
 import { setDate, setDateChange } from "../searchSlice";
-import getWeather from "../../../services/getWeather";
 import { setWeather } from "../../weather/weatherSlice";
+import getWeather from "../../../services/getWeather";
 
 function ButtonField(props) {
 	const { setOpen, id, disabled, InputProps: { ref } = {}, inputProps: { "aria-label": ariaLabel } = {} } = props;
@@ -41,7 +41,12 @@ function ButtonDatePicker(props) {
 	return (
 		<DateTimePicker
 			slots={{ field: ButtonField, ...props.slots }}
-			slotProps={{ field: { setOpen } }}
+			slotProps={{
+				field: { setOpen },
+				actionBar: {
+					actions: ["today"],
+				},
+			}}
 			{...props}
 			open={open}
 			onClose={() => setOpen(false)}
@@ -61,17 +66,18 @@ export default function PickerWithButtonField() {
 	const dispatch = useDispatch();
 
 	const temperatureUnit = useSelector((state) => state.settings.temperatureUnit);
-	const { date, location } = useSelector((state) => state.search);
+	const { location } = useSelector((state) => state.search);
 
 	const handleDateInitialisation = (newDate) => {
 		dispatch(setDate(new Date(newDate).toString()));
 	};
 
 	const handleDateChange = async (newDate) => {
-		dispatch(setDate(new Date(newDate).toString()));
+		const formattedDate = new Date(newDate).toString();
+		dispatch(setDate(formattedDate));
 		dispatch(setDateChange(true));
 
-		const { data, aqi } = await getWeather(date, location, temperatureUnit);
+		const { data, aqi } = await getWeather(formattedDate, location, temperatureUnit);
 		console.log(data);
 		console.log(location);
 		dispatch(setWeather({ ...data, location, aqi }));
