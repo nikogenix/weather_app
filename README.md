@@ -120,7 +120,8 @@
             -   [x] weather panel
             -   [ ] c/a panel
         -   [ ] hourly/daily
-            -   [ ] weather graph
+            -   [x] daily timeline
+            -   [ ] hourly weather graph
             -   [ ] c/a recommendations in the details section for each day
         -   [ ] warnings for severe weather conditions
     -   [ ] trip page
@@ -128,6 +129,8 @@
         -   [ ] option to remove one/all
         -   [ ] display weather & c/a next to each trip location
         -   [ ] c/a overview panel for the whole trip
+    -   [ ] others
+        -   [ ] tooltip for aqi ranges
 -   [x] footer
     -   [x] scroll animation
 -   [ ] others
@@ -135,6 +138,7 @@
     -   [ ] verify accessibility
         -   [x] icon descriptions
     -   [ ] error handling
+        -   [x] displaying "n/a" when no data is available
     -   [ ] testing
     -   [ ] performance
 -   [ ] bugs
