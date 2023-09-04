@@ -133,6 +133,7 @@
 -   [ ] others
     -   [ ] improve style and responsiveness
     -   [ ] verify accessibility
+        -   [x] icon descriptions
     -   [ ] error handling
     -   [ ] testing
     -   [ ] performance
