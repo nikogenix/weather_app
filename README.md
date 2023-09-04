@@ -89,7 +89,8 @@
         -   [x] autocomplete location with API data
             -   [x] debounce requests
         -   [ ] option to select location on map
-        -   [ ] date & time selection
+        -   [ ] option to search based on user's location
+        -   [x] date & time selection
             -   [x] choose current time by default
             -   [x] integrate date into API request
             -   [x] limit date range based on API availability
