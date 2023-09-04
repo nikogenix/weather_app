@@ -1,12 +1,16 @@
 import { Box, Typography } from "@mui/material";
 
-const WeatherDetail = ({ header, subheader }) => {
+import { formatWeatherData } from "../../../utils/formatWeatherData";
+
+const WeatherDetail = ({ header, value, unit, type }) => {
+	const formattedInfo = formatWeatherData(value, unit, type);
+
 	return (
 		<Box sx={{ height: 66, width: "100%" }}>
 			<Typography variant="subtitle2" sx={{ fontWeight: "bold", fontSize: 14 }} color="primary">
 				{header}
 			</Typography>
-			<Typography>{subheader}</Typography>
+			<Typography>{formattedInfo}</Typography>
 		</Box>
 	);
 };

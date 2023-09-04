@@ -35,7 +35,7 @@ const getWeather = async (date, location, temperatureUnit) => {
 	if (date && location && temperatureUnit) {
 		const { latitude, longitude } = location;
 		const units = temperatureUnit === "C" ? paramsForC : paramsForF;
-
+		console.log(date);
 		const startDate = new Date(date);
 		const endDate = new Date();
 		endDate.setDate(endDate.getDate() + 16);
@@ -53,7 +53,6 @@ const getWeather = async (date, location, temperatureUnit) => {
 
 		const url = `${BASE_URL}?${queryParams.toString()}`;
 
-		// Check if there is at least 1 day of data for AQI
 		if (endDateAqi >= startDate) {
 			const aqiQueryParams = new URLSearchParams({
 				latitude,
@@ -71,10 +70,8 @@ const getWeather = async (date, location, temperatureUnit) => {
 			console.log(aqi);
 			return { data, aqi };
 		} else {
-			// Handle the case where there's not enough data for AQI
-			console.log("Not enough data for AQI.");
 			const { data } = await axios.get(url);
-			return { data, aqi: { hourly: { european_aqi: [] } } }; // You can set aqi to null or handle it as needed
+			return { data, aqi: { hourly: { european_aqi: [] }, hourly_units: { european_aqi: [] } } };
 		}
 	}
 };

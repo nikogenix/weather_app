@@ -1,29 +1,13 @@
 import * as React from "react";
-
-import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { Box, Container, Divider, Icon, Paper, Typography } from "@mui/material";
+import { Box, Divider, Icon, Paper, Typography } from "@mui/material";
 
-import "../../../assets/css/weather-icons.min.css";
-import "../../../assets/css/weather-icons-wind.min.css";
+import { formatWeatherData } from "../../../utils/formatWeatherData";
 
-import { WEATHER_CODES } from "../../../data/weather";
-
-export default function WeatherGraphs() {
-	const { data } = useSelector((state) => state.weather);
-	const { date, dateChange } = useSelector((state) => state.search);
-
-	const selectedTime =
-		Object.getOwnPropertyNames(data).length === 0
-			? "00:00"
-			: dateChange
-			? `${new Date(date).getHours().toString().padStart(2, "0")}:00`
-			: data.current_weather.time.slice(11, 16);
-	const forecastStartIndex = Number(selectedTime.slice(0, 2));
-
+export default function WeatherGraphs({ data }) {
 	const [daySelection, setDaySelection] = React.useState("");
 
 	const handleChange = (event, newAlignment) => {
@@ -34,8 +18,6 @@ export default function WeatherGraphs() {
 		const day = data?.daily?.time[0] || "";
 		setDaySelection(day);
 	}, [data]);
-
-	if (Object.getOwnPropertyNames(data).length === 0) return <></>;
 
 	return (
 		<Paper sx={{ width: "100%", overflowX: "scroll", p: 0, my: 3 }}>
@@ -50,16 +32,22 @@ export default function WeatherGraphs() {
 						<Icon
 							component="i"
 							sx={{ fontSize: 30, overflow: "visible", width: "min-content", m: 2 }}
-							baseClassName={`wi ${WEATHER_CODES[Number(data.daily.weathercode[i])].dayIcon}`}
+							baseClassName={`wi ${formatWeatherData(data.daily.weathercode[i], 1, "weather icon")}`}
 							aria-hidden={false}
-							aria-label={`weather icon: ${WEATHER_CODES[Number(data.daily.weathercode[i])].description}`}
+							aria-label={`weather icon - ${formatWeatherData(
+								data.daily.weathercode[i],
+								undefined,
+								"weather description"
+							)}`}
 							role="img"
 						></Icon>
 						<Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
-							<Typography fontSize={15}>{data.daily.temperature_2m_min[i]}°</Typography>
+							<Typography fontSize={15}>
+								{formatWeatherData(data.daily.temperature_2m_min[i], undefined, "degree")}
+							</Typography>
 							<Divider sx={{ mx: 1 }} orientation="vertical" flexItem />
 							<Typography fontSize={15} fontWeight={"bold"}>
-								{data.daily.temperature_2m_max[i]}°
+								{formatWeatherData(data.daily.temperature_2m_max[i], undefined, "degree")}
 							</Typography>
 						</Box>
 					</ToggleButton>

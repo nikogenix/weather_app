@@ -1,26 +1,11 @@
-import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 
 import { Box, Card, CardContent, CardHeader, Icon, Typography } from "@mui/material";
 import WeatherDetail from "./WeatherDetail";
 
-import "../../../assets/css/weather-icons.min.css";
-import "../../../assets/css/weather-icons-wind.min.css";
+import { formatWeatherData } from "../../../utils/formatWeatherData";
 
-import { WEATHER_CODES } from "../../../data/weather";
-
-const CurrentWeather = () => {
-	const { data } = useSelector((state) => state.weather);
-	const { date, dateChange } = useSelector((state) => state.search);
-	const weatherWarning = false;
-
-	if (Object.getOwnPropertyNames(data).length === 0) return <></>;
-
-	const selectedTime = dateChange
-		? `${new Date(date).getHours().toString().padStart(2, "0")}:00`
-		: data.current_weather.time.slice(11, 16);
-	const forecastStartIndex = Number(selectedTime.slice(0, 2));
-
+const CurrentWeather = ({ data, selectedTime, forecastStartIndex, weatherWarning }) => {
 	return (
 		<Card sx={{ display: "flex", flexDirection: "column" }}>
 			{/* headers */}
@@ -89,29 +74,41 @@ const CurrentWeather = () => {
 						<Icon
 							component="i"
 							sx={{ fontSize: 80, overflow: "visible", width: "min-content" }}
-							baseClassName={`wi ${
-								data.hourly.is_day[forecastStartIndex]
-									? WEATHER_CODES[Number(data.hourly.weathercode[forecastStartIndex])].dayIcon
-									: WEATHER_CODES[Number(data.hourly.weathercode[forecastStartIndex])].nightIcon
-							}`}
+							baseClassName={`wi ${formatWeatherData(
+								data.hourly.weathercode[forecastStartIndex],
+								data.hourly.is_day[forecastStartIndex],
+								"weather icon"
+							)}`}
 							aria-hidden={false}
-							aria-label={`weather icon: ${
-								WEATHER_CODES[Number(data.hourly.weathercode[forecastStartIndex])].description
-							}`}
+							aria-label={`weather icon - ${formatWeatherData(
+								data.hourly.weathercode[forecastStartIndex],
+								undefined,
+								"weather description"
+							)}`}
 							role="img"
 						></Icon>
 					</Box>
 					<Box sx={{ m: 3 }}>
 						<Typography fontSize={40}>
-							{data.hourly.temperature_2m[forecastStartIndex]}
-							{data.hourly_units.temperature_2m}
+							{formatWeatherData(
+								data.hourly.temperature_2m[forecastStartIndex],
+								data.hourly_units.temperature_2m,
+								"temperature"
+							)}
 						</Typography>
 						<Typography>
-							{WEATHER_CODES[data.hourly.weathercode[forecastStartIndex]].description}
+							{formatWeatherData(
+								data.hourly.weathercode[forecastStartIndex],
+								undefined,
+								"weather description"
+							)}
 						</Typography>
 						<Typography>
-							feels like {data.hourly.apparent_temperature[forecastStartIndex]}
-							{data.hourly_units.temperature_2m}
+							{formatWeatherData(
+								data.hourly.apparent_temperature[forecastStartIndex],
+								data.hourly_units.temperature_2m,
+								"apparent temperature"
+							)}
 						</Typography>
 					</Box>
 				</Box>
@@ -128,46 +125,52 @@ const CurrentWeather = () => {
 					<Box sx={{ mr: 1, width: "40%" }}>
 						<WeatherDetail
 							header="air quality"
-							subheader={
-								data.aqi.hourly.european_aqi[forecastStartIndex]
-									? `${data.aqi.hourly.european_aqi[forecastStartIndex]} (${data.aqi.hourly_units.european_aqi})`
-									: "no data"
-							}
+							value={data.aqi.hourly.european_aqi[forecastStartIndex]}
+							unit={data.aqi.hourly_units.european_aqi}
+							type={"aqi"}
 						/>
 						<WeatherDetail
 							header="wind"
-							subheader={`${data.hourly.windspeed_10m[forecastStartIndex]} ${data.daily_units.windspeed_10m_max}`}
+							value={data.hourly.windspeed_10m[forecastStartIndex]}
+							unit={data.daily_units.windspeed_10m_max}
+							type={"misc"}
 						/>
 						{/* WIP wind direction icon */}
 						<WeatherDetail
 							header="humidity"
-							subheader={`${data.hourly.relativehumidity_2m[forecastStartIndex]}%`}
+							value={data.hourly.relativehumidity_2m[forecastStartIndex]}
+							type="percentage"
 						/>
 						<WeatherDetail
 							header="visibility"
-							subheader={`${data.hourly.visibility[forecastStartIndex].toFixed(0)} ${
-								data.hourly_units.visibility
-							}`}
+							value={data.hourly.visibility[forecastStartIndex]}
+							unit={data.hourly_units.visibility}
+							type="misc integer"
 						/>
 					</Box>
 
 					<Box sx={{ textAlign: "right", ml: 1, width: "40%" }}>
-						<WeatherDetail header="UV index" subheader={data.hourly.uv_index[forecastStartIndex]} />
+						<WeatherDetail
+							header="UV index"
+							value={data.hourly.uv_index[forecastStartIndex]}
+							type={"unitless"}
+						/>
 						<WeatherDetail
 							header="surface pressure"
-							subheader={`${data.hourly.surface_pressure[forecastStartIndex]} ${data.hourly_units.surface_pressure}`}
+							value={data.hourly.surface_pressure[forecastStartIndex]}
+							unit={data.hourly_units.surface_pressure}
+							type="misc integer"
 						/>
 						<WeatherDetail
 							header="dew point"
-							subheader={`${data.hourly.dewpoint_2m[forecastStartIndex]}${data.hourly_units.dewpoint_2m}`}
+							value={data.hourly.dewpoint_2m[forecastStartIndex]}
+							unit={data.hourly_units.dewpoint_2m}
+							type="temperature"
 						/>
 						<WeatherDetail
 							header="precipitation chance"
-							subheader={
-								data.hourly.precipitation_probability[forecastStartIndex] !== null
-									? `${data.hourly.precipitation_probability[forecastStartIndex]}%`
-									: "no data"
-							}
+							value={data.hourly.precipitation_probability[forecastStartIndex]}
+							type={"percentage"}
 						/>
 					</Box>
 				</Box>
