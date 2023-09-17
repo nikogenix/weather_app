@@ -19,7 +19,6 @@ const paramsForWeather = {
 	daily: "weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,uv_index_max,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_hours,precipitation_probability_max,windspeed_10m_max,windgusts_10m_max,winddirection_10m_dominant",
 	current_weather: "true",
 	timezone: "auto",
-	forecast_days: "16",
 };
 
 const paramsForAqi = {
