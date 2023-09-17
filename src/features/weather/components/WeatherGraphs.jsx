@@ -23,7 +23,7 @@ export default function WeatherGraphs({ data }) {
 	};
 
 	React.useEffect(() => {
-		const day = data?.daily?.time[0] || "";
+		const day = data ? data.daily.time[0] : "";
 		setDaySelection(day);
 	}, [data]);
 
@@ -57,33 +57,33 @@ export default function WeatherGraphs({ data }) {
 			showMark: false,
 			curve: "natural",
 		},
-		// {
-		// 	yAxisKey: "linearAxis",
-		// 	data: chartData.feelsLike,
-		// 	color: "#bab0ab",
-		// 	label: "feels like",
-		// 	showMark: false,
-		// 	curve: "natural",
-		// },
-		// {
-		// 	yAxisKey: "linearAxis",
-		// 	data: chartData.precipitation,
-		// 	color: "#4e79a7",
-		// 	label: "precipitation",
-		// 	showMark: false,
-		// 	curve: "natural",
-		// },
-		// {
-		// 	yAxisKey: "linearAxis",
-		// 	data: chartData.wind,
-		// 	color: "#bab0ab",
-		// 	label: "wind",
-		// 	showMark: false,
-		// 	curve: "natural",
-		// },
+		{
+			yAxisKey: "linearAxis",
+			data: chartData.feelsLike,
+			color: "#bab0ab",
+			label: "feels like",
+			showMark: false,
+			curve: "natural",
+		},
+		{
+			yAxisKey: "linearAxis",
+			data: chartData.precipitation,
+			color: "#4e79a7",
+			label: "precipitation",
+			showMark: false,
+			curve: "natural",
+		},
+		{
+			yAxisKey: "linearAxis",
+			data: chartData.wind,
+			color: "#bab0ab",
+			label: "wind",
+			showMark: false,
+			curve: "natural",
+		},
 	];
 
-	const filteredSeries = series.filter((c) => !c.data.includes(null));
+	const filteredSeries = series.filter((c) => !c.data.includes(null) && c.data.length !== 0);
 
 	return (
 		<>
