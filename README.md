@@ -142,7 +142,7 @@
     -   [ ] testing
     -   [ ] performance
 -   [ ] bugs
-    -   [ ] "Maximum update depth exceeded" warning in the clock from the date picker, when holding down the mouse and dragging for an extended amount of time
+    -   [ ] "Maximum update depth exceeded" warning [1] in the clock from the date picker, when holding down the mouse and dragging for an extended amount of time and [2] in the weather graphs, when hovering
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
