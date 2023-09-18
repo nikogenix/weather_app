@@ -12,3 +12,11 @@
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-text-size-adjust: 100%;
 }
+
+.MuiChartsTooltip-valueCell {
+	padding-left: 5px !important;
+}
+
+.MuiChartsTooltip-labelCell {
+	display: none !important;
+}
