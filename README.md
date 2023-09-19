@@ -97,6 +97,9 @@
         -   [ ] display country flags
         -   [ ] search history
         -   [ ] bookmarked locations - save & remove
+        -   [ ] improve UX
+            -   [ ] allow search when user presses enter
+            -   [ ] disable search when there is no location selected/no input
     -   [x] dark/light mode
     -   [x] unit preference (metric/imperial)
         -   [x] refetch API data upon changing the preference
@@ -121,7 +124,9 @@
             -   [ ] c/a panel
         -   [ ] hourly/daily
             -   [x] daily timeline
-            -   [ ] hourly weather graph
+            -   [ ] hourly weather
+                -   [x] graph
+                -   [ ] timeline
             -   [ ] c/a recommendations in the details section for each day
         -   [ ] warnings for severe weather conditions
     -   [ ] trip page
