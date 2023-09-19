@@ -11,14 +11,23 @@ import useScrollTrigger from "@mui/material/useScrollTrigger";
 import { useLocation } from "react-router-dom";
 
 function HideOnScroll(props) {
-	const { children } = props;
+	const { children, setIsShortPage } = props;
 	const trigger = useScrollTrigger();
 	const [reachedBottom, setReachedBottom] = useState(false);
 
 	useEffect(() => {
+		const checkPageHeight = () => {
+			setIsShortPage(document.documentElement.scrollHeight <= window.innerHeight);
+		};
+
 		window.addEventListener("scroll", handleScroll);
-		return () => window.removeEventListener("scroll", handleScroll);
-	}, []);
+		window.addEventListener("scroll", checkPageHeight);
+
+		return () => {
+			window.removeEventListener("scroll", handleScroll);
+			window.removeEventListener("scroll", checkPageHeight);
+		};
+	}, [setIsShortPage]);
 
 	function handleScroll() {
 		if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight) {
@@ -51,7 +60,7 @@ const SlidingFooter = (props) => {
 	}, [location.key]);
 
 	return (
-		<HideOnScroll {...props}>
+		<HideOnScroll {...props} isShortPage={isShortPage} setIsShortPage={setIsShortPage}>
 			<AppBar
 				component="footer"
 				position={isShortPage ? "absolute" : "sticky"}
