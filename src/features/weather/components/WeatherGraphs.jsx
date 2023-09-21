@@ -20,7 +20,7 @@ import MasksIcon from "@mui/icons-material/Masks";
 
 import { formatWeatherData } from "../../../utils/formatWeatherData";
 
-export default function WeatherGraphs({ data }) {
+export default function WeatherGraphs({ data, date }) {
 	const [daySelection, setDaySelection] = React.useState("");
 	const [hourSelection, setHourSelection] = React.useState("");
 	const [chartData, setChartData] = React.useState({
@@ -33,18 +33,44 @@ export default function WeatherGraphs({ data }) {
 		aqi: [],
 	});
 
+	const containerRef = React.useRef(null);
+	const buttonRefs = React.useRef([]);
+
 	const handleChange = (event, newDay) => {
-		setDaySelection(newDay);
+		if (newDay !== null) setDaySelection(newDay);
 	};
 
 	const handleHourChange = (event, newHour) => {
-		setHourSelection(newHour);
+		if (newHour !== null) setHourSelection(newHour);
 	};
 
 	React.useEffect(() => {
 		const day = data ? data.daily.time[0] : "";
 		setDaySelection(day);
 	}, [data]);
+
+	React.useEffect(() => {
+		const hourIndex = daySelection == dayjs(date).format("YYYY-MM-DD") ? Number(dayjs(date).format("H")) : 0;
+		const hour =
+			chartData.hours.length > 0 && daySelection == dayjs(date).format("YYYY-MM-DD")
+				? chartData.hours[hourIndex]
+				: chartData.hours[0];
+
+		const container = containerRef.current;
+		const button = buttonRefs.current[hourIndex];
+
+		if (button) {
+			const style = getComputedStyle(button);
+			const size = parseFloat(style.width) + style.margin.split(" ").reduce((acc, c) => acc + parseFloat(c), 0);
+
+			container.scroll({
+				left: hourIndex * size,
+				behavior: "smooth",
+			});
+		}
+
+		setHourSelection(hour);
+	}, [chartData, date, daySelection]);
 
 	React.useEffect(() => {
 		if (data.hourly) {
@@ -240,10 +266,11 @@ export default function WeatherGraphs({ data }) {
 					))}
 				</ToggleButtonGroup>
 			</Paper>
-			<Paper sx={{ width: "100%", overflowX: "scroll", p: 0 }}>
+			<Paper ref={containerRef} sx={{ width: "100%", overflowX: "scroll", p: 0 }}>
 				<ToggleButtonGroup value={hourSelection} exclusive onChange={handleHourChange} aria-label="Platform">
 					{chartData.hours.map((hour, i) => (
 						<ToggleButton
+							ref={(ref) => (buttonRefs.current[i] = ref)}
 							key={i}
 							value={hour}
 							sx={{ display: "flex", flexDirection: "column", width: hourSelection === hour ? 200 : 100 }}
