@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 
 import { formatWeatherData } from "../../../utils/formatWeatherData";
 
-const WeatherDetail = ({ header, value, unit, type }) => {
+const CurrentWeatherDetail = ({ header, value, unit, type }) => {
 	const formattedInfo = formatWeatherData(value, unit, type);
 
 	return (
@@ -15,4 +15,4 @@ const WeatherDetail = ({ header, value, unit, type }) => {
 	);
 };
 
-export default WeatherDetail;
+export default CurrentWeatherDetail;

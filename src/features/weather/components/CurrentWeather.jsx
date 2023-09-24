@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 
 import { Box, Card, CardContent, CardHeader, Icon, Typography } from "@mui/material";
-import WeatherDetail from "./WeatherDetail";
+import CurrentWeatherDetail from "./CurrentWeatherDetail";
 
 import { formatWeatherData } from "../../../utils/formatWeatherData";
 
@@ -123,25 +123,25 @@ const CurrentWeather = ({ data, selectedTime, forecastStartIndex, weatherWarning
 					}}
 				>
 					<Box sx={{ mr: 1, width: "40%" }}>
-						<WeatherDetail
+						<CurrentWeatherDetail
 							header="air quality"
 							value={data.aqi.hourly.european_aqi[forecastStartIndex]}
 							unit={data.aqi.hourly_units.european_aqi}
 							type={"aqi"}
 						/>
-						<WeatherDetail
+						<CurrentWeatherDetail
 							header="wind"
 							value={data.hourly.windspeed_10m[forecastStartIndex]}
 							unit={data.daily_units.windspeed_10m_max}
 							type={"misc"}
 						/>
 						{/* WIP wind direction icon */}
-						<WeatherDetail
+						<CurrentWeatherDetail
 							header="humidity"
 							value={data.hourly.relativehumidity_2m[forecastStartIndex]}
 							type="percentage"
 						/>
-						<WeatherDetail
+						<CurrentWeatherDetail
 							header="visibility"
 							value={data.hourly.visibility[forecastStartIndex]}
 							unit={data.hourly_units.visibility}
@@ -150,24 +150,24 @@ const CurrentWeather = ({ data, selectedTime, forecastStartIndex, weatherWarning
 					</Box>
 
 					<Box sx={{ textAlign: "right", ml: 1, width: "40%" }}>
-						<WeatherDetail
+						<CurrentWeatherDetail
 							header="UV index"
 							value={data.hourly.uv_index[forecastStartIndex]}
 							type={"unitless"}
 						/>
-						<WeatherDetail
+						<CurrentWeatherDetail
 							header="surface pressure"
 							value={data.hourly.surface_pressure[forecastStartIndex]}
 							unit={data.hourly_units.surface_pressure}
 							type="misc integer"
 						/>
-						<WeatherDetail
+						<CurrentWeatherDetail
 							header="dew point"
 							value={data.hourly.dewpoint_2m[forecastStartIndex]}
 							unit={data.hourly_units.dewpoint_2m}
 							type="temperature"
 						/>
-						<WeatherDetail
+						<CurrentWeatherDetail
 							header="precipitation chance"
 							value={data.hourly.precipitation_probability[forecastStartIndex]}
 							type={"percentage"}
