@@ -71,6 +71,12 @@
     npm run dev -- --host
     ```
 
+    ...or build and preview the project
+-   ```sh
+    npm run build
+    npm run preview
+    ```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
