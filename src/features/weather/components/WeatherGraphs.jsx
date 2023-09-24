@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect, useRef, useState } from "react";
 
 import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
@@ -21,9 +21,9 @@ import MasksIcon from "@mui/icons-material/Masks";
 import { formatWeatherData } from "../../../utils/formatWeatherData";
 
 export default function WeatherGraphs({ data, date }) {
-	const [daySelection, setDaySelection] = React.useState("");
-	const [hourSelection, setHourSelection] = React.useState("");
-	const [chartData, setChartData] = React.useState({
+	const [daySelection, setDaySelection] = useState("");
+	const [hourSelection, setHourSelection] = useState("");
+	const [chartData, setChartData] = useState({
 		hours: [],
 		temperature: [],
 		feelsLike: [],
@@ -33,8 +33,8 @@ export default function WeatherGraphs({ data, date }) {
 		aqi: [],
 	});
 
-	const containerRef = React.useRef(null);
-	const buttonRefs = React.useRef([]);
+	const containerRef = useRef(null);
+	const buttonRefs = useRef([]);
 
 	const handleChange = (event, newDay) => {
 		if (newDay !== null) setDaySelection(newDay);
@@ -44,12 +44,12 @@ export default function WeatherGraphs({ data, date }) {
 		if (newHour !== null) setHourSelection(newHour);
 	};
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const day = data ? data.daily.time[0] : "";
 		setDaySelection(day);
 	}, [data]);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const hourIndex = daySelection == dayjs(date).format("YYYY-MM-DD") ? Number(dayjs(date).format("H")) : 0;
 		const hour =
 			chartData.hours.length > 0 && daySelection == dayjs(date).format("YYYY-MM-DD")
@@ -72,7 +72,7 @@ export default function WeatherGraphs({ data, date }) {
 		setHourSelection(hour);
 	}, [chartData, date, daySelection]);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (data.hourly) {
 			const start = data.hourly.time.findIndex((c) => c.includes(daySelection));
 			const end = data.hourly.time.findLastIndex((c) => c.includes(daySelection)) + 1;
@@ -175,32 +175,81 @@ export default function WeatherGraphs({ data, date }) {
 	const dateValueFormatter = (date) => dayjs.tz(date, data.location.timezone).format("h A");
 
 	return (
-		<>
-			<Paper sx={{ width: "100%", overflowX: "scroll", p: 0, mt: 3 }}>
-				<ToggleButtonGroup value={daySelection} exclusive onChange={handleChange} aria-label="Platform">
-					{data.daily.time.map((day, i) => (
-						<ToggleButton
-							key={i}
-							value={day}
-							sx={{ display: "flex", flexDirection: "column", width: daySelection === day ? 200 : 100 }}
-						>
-							<Typography sx={{ textTransform: "none" }}>{dayjs(day).format("MMM D")} </Typography>
+		daySelection && (
+			<>
+				<Paper sx={{ width: "100%", overflowX: "scroll", p: 0, mt: 3 }}>
+					<ToggleButtonGroup value={daySelection} exclusive onChange={handleChange} aria-label="Platform">
+						{data.daily.time.map((day, i) => (
+							<ToggleButton
+								key={i}
+								value={day}
+								sx={{
+									display: "flex",
+									flexDirection: "column",
+									width: daySelection === day ? 200 : 100,
+								}}
+							>
+								<Typography sx={{ textTransform: "none" }}>{dayjs(day).format("MMM D")} </Typography>
 
-							{day === daySelection && (
-								<Box sx={{ display: "flex", flexDirection: "row" }}>
-									<Tooltip title="sunrise" placement="top" arrow>
-										<Box sx={{ mr: 2, position: "relative", top: -30 }}>
-											<Icon
-												component="i"
-												sx={{ fontSize: 15, overflow: "visible", width: "min-content", m: 1 }}
-												baseClassName={`wi wi-sunrise`}
-												aria-hidden={false}
-												aria-label={`sunrise icon`}
-												role="img"
-											></Icon>
-											<Typography fontSize={12}>{data.daily.sunrise[i].slice(-5)}</Typography>
-										</Box>
-									</Tooltip>
+								{day === daySelection && (
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										<Tooltip title="sunrise" placement="top" arrow>
+											<Box sx={{ mr: 2, position: "relative", top: -30 }}>
+												<Icon
+													component="i"
+													sx={{
+														fontSize: 15,
+														overflow: "visible",
+														width: "min-content",
+														m: 1,
+													}}
+													baseClassName={`wi wi-sunrise`}
+													aria-hidden={false}
+													aria-label={`sunrise icon`}
+													role="img"
+												></Icon>
+												<Typography fontSize={12}>{data.daily.sunrise[i].slice(-5)}</Typography>
+											</Box>
+										</Tooltip>
+										<Icon
+											component="i"
+											sx={{ fontSize: 30, overflow: "visible", width: "min-content", m: 2 }}
+											baseClassName={`wi ${formatWeatherData(
+												data.daily.weathercode[i],
+												1,
+												"weather icon"
+											)}`}
+											aria-hidden={false}
+											aria-label={`weather icon - ${formatWeatherData(
+												data.daily.weathercode[i],
+												undefined,
+												"weather description"
+											)}`}
+											role="img"
+										></Icon>
+
+										<Tooltip title="sunset" placement="top" arrow>
+											<Box sx={{ ml: 2, position: "relative", top: -30 }}>
+												<Icon
+													component="i"
+													sx={{
+														fontSize: 15,
+														overflow: "visible",
+														width: "min-content",
+														m: 1,
+													}}
+													baseClassName={`wi wi-moonrise`}
+													aria-hidden={false}
+													aria-label={`moonrise icon (sunset time)`}
+													role="img"
+												></Icon>
+												<Typography fontSize={12}>{data.daily.sunset[i].slice(-5)}</Typography>
+											</Box>
+										</Tooltip>
+									</Box>
+								)}
+
+								{day !== daySelection && (
 									<Icon
 										component="i"
 										sx={{ fontSize: 30, overflow: "visible", width: "min-content", m: 2 }}
@@ -217,199 +266,181 @@ export default function WeatherGraphs({ data, date }) {
 										)}`}
 										role="img"
 									></Icon>
+								)}
 
-									<Tooltip title="sunset" placement="top" arrow>
-										<Box sx={{ ml: 2, position: "relative", top: -30 }}>
-											<Icon
-												component="i"
-												sx={{ fontSize: 15, overflow: "visible", width: "min-content", m: 1 }}
-												baseClassName={`wi wi-moonrise`}
-												aria-hidden={false}
-												aria-label={`moonrise icon (sunset time)`}
-												role="img"
-											></Icon>
-											<Typography fontSize={12}>{data.daily.sunset[i].slice(-5)}</Typography>
-										</Box>
-									</Tooltip>
+								<Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+									<Typography fontSize={15}>
+										{formatWeatherData(data.daily.temperature_2m_min[i], undefined, "degree")}
+									</Typography>
+									<Divider sx={{ mx: 1 }} orientation="vertical" flexItem />
+									<Typography fontSize={15} fontWeight={"bold"}>
+										{formatWeatherData(data.daily.temperature_2m_max[i], undefined, "degree")}
+									</Typography>
 								</Box>
-							)}
+							</ToggleButton>
+						))}
+					</ToggleButtonGroup>
+				</Paper>
 
-							{day !== daySelection && (
+				<Paper ref={containerRef} sx={{ width: "100%", overflowX: "scroll", p: 0 }}>
+					<ToggleButtonGroup
+						value={hourSelection}
+						exclusive
+						onChange={handleHourChange}
+						aria-label="Platform"
+					>
+						{chartData.hours.map((hour, i) => (
+							<ToggleButton
+								ref={(ref) => (buttonRefs.current[i] = ref)}
+								key={i}
+								value={hour}
+								sx={{
+									display: "flex",
+									flexDirection: "column",
+									width: hourSelection === hour ? 200 : 100,
+								}}
+							>
+								<Typography sx={{ textTransform: "none" }}>{dayjs(hour).format("h A")} </Typography>
 								<Icon
 									component="i"
 									sx={{ fontSize: 30, overflow: "visible", width: "min-content", m: 2 }}
 									baseClassName={`wi ${formatWeatherData(
-										data.daily.weathercode[i],
+										chartData.weathercode[i],
 										1,
 										"weather icon"
 									)}`}
 									aria-hidden={false}
 									aria-label={`weather icon - ${formatWeatherData(
-										data.daily.weathercode[i],
+										chartData.weathercode[i],
 										undefined,
 										"weather description"
 									)}`}
 									role="img"
 								></Icon>
-							)}
 
-							<Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
-								<Typography fontSize={15}>
-									{formatWeatherData(data.daily.temperature_2m_min[i], undefined, "degree")}
-								</Typography>
-								<Divider sx={{ mx: 1 }} orientation="vertical" flexItem />
-								<Typography fontSize={15} fontWeight={"bold"}>
-									{formatWeatherData(data.daily.temperature_2m_max[i], undefined, "degree")}
-								</Typography>
-							</Box>
-						</ToggleButton>
-					))}
-				</ToggleButtonGroup>
-			</Paper>
-			<Paper ref={containerRef} sx={{ width: "100%", overflowX: "scroll", p: 0 }}>
-				<ToggleButtonGroup value={hourSelection} exclusive onChange={handleHourChange} aria-label="Platform">
-					{chartData.hours.map((hour, i) => (
-						<ToggleButton
-							ref={(ref) => (buttonRefs.current[i] = ref)}
-							key={i}
-							value={hour}
-							sx={{ display: "flex", flexDirection: "column", width: hourSelection === hour ? 200 : 100 }}
-						>
-							<Typography sx={{ textTransform: "none" }}>{dayjs(hour).format("h A")} </Typography>
-							<Icon
-								component="i"
-								sx={{ fontSize: 30, overflow: "visible", width: "min-content", m: 2 }}
-								baseClassName={`wi ${formatWeatherData(chartData.weathercode[i], 1, "weather icon")}`}
-								aria-hidden={false}
-								aria-label={`weather icon - ${formatWeatherData(
-									chartData.weathercode[i],
-									undefined,
-									"weather description"
-								)}`}
-								role="img"
-							></Icon>
+								<Box
+									sx={{
+										display: "flex",
+										justifyContent: "center",
+										width: "100%",
+										flexDirection: "column",
+									}}
+								>
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										<Tooltip placement="left" title="temperature" arrow>
+											<ThermostatIcon sx={{ mr: 0.5, fontSize: 15 }} />
+										</Tooltip>
+										<Typography fontSize={12}>
+											{formatWeatherData(chartData.temperature[i], undefined, "degree")}
+										</Typography>
+									</Box>
 
-							<Box
-								sx={{
-									display: "flex",
-									justifyContent: "center",
-									width: "100%",
-									flexDirection: "column",
-								}}
-							>
-								<Box sx={{ display: "flex", flexDirection: "row" }}>
-									<Tooltip placement="left" title="temperature" arrow>
-										<ThermostatIcon sx={{ mr: 0.5, fontSize: 15 }} />
-									</Tooltip>
-									<Typography fontSize={12}>
-										{formatWeatherData(chartData.temperature[i], undefined, "degree")}
-									</Typography>
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										<Tooltip placement="left" title="feels like" arrow>
+											<SensorOccupiedIcon sx={{ mr: 0.5, fontSize: 15 }} />
+										</Tooltip>
+										<Typography sx={{ textTransform: "none" }} fontSize={12}>
+											{formatWeatherData(chartData.feelsLike[i], undefined, "degree")}
+										</Typography>
+									</Box>
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										<Tooltip placement="left" title="precipitation chance" arrow>
+											<WaterDropIcon sx={{ mr: 0.5, fontSize: 15 }} />
+										</Tooltip>
+										<Typography sx={{ textTransform: "none" }} fontSize={12}>
+											{formatWeatherData(chartData.precipitation[i], undefined, "percentage")}
+										</Typography>
+									</Box>
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										<Tooltip placement="left" title="wind speed" arrow>
+											<AirIcon sx={{ mr: 0.5, fontSize: 15 }} />
+										</Tooltip>
+										<Typography sx={{ textTransform: "none" }} fontSize={12}>
+											{formatWeatherData(chartData.wind[i], chartData.windUnit, "misc")}
+										</Typography>
+									</Box>
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										<Tooltip placement="left" title="UV" arrow>
+											<SolarPowerIcon sx={{ mr: 0.5, fontSize: 15 }} />
+										</Tooltip>
+										<Typography sx={{ textTransform: "none" }} fontSize={12}>
+											{formatWeatherData(chartData.uv[i], undefined, "unitless")}
+										</Typography>
+									</Box>
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										<Tooltip placement="left" title="air quality" arrow>
+											<MasksIcon sx={{ mr: 0.5, fontSize: 15 }} />
+										</Tooltip>
+										<Typography sx={{ textTransform: "none" }} fontSize={12}>
+											{formatWeatherData(chartData.aqi[i], undefined, "unitless")}
+										</Typography>
+									</Box>
 								</Box>
+							</ToggleButton>
+						))}
+					</ToggleButtonGroup>
+				</Paper>
 
-								<Box sx={{ display: "flex", flexDirection: "row" }}>
-									<Tooltip placement="left" title="feels like" arrow>
-										<SensorOccupiedIcon sx={{ mr: 0.5, fontSize: 15 }} />
-									</Tooltip>
-									<Typography sx={{ textTransform: "none" }} fontSize={12}>
-										{formatWeatherData(chartData.feelsLike[i], undefined, "degree")}
-									</Typography>
-								</Box>
-								<Box sx={{ display: "flex", flexDirection: "row" }}>
-									<Tooltip placement="left" title="precipitation chance" arrow>
-										<WaterDropIcon sx={{ mr: 0.5, fontSize: 15 }} />
-									</Tooltip>
-									<Typography sx={{ textTransform: "none" }} fontSize={12}>
-										{formatWeatherData(chartData.precipitation[i], undefined, "percentage")}
-									</Typography>
-								</Box>
-								<Box sx={{ display: "flex", flexDirection: "row" }}>
-									<Tooltip placement="left" title="wind speed" arrow>
-										<AirIcon sx={{ mr: 0.5, fontSize: 15 }} />
-									</Tooltip>
-									<Typography sx={{ textTransform: "none" }} fontSize={12}>
-										{formatWeatherData(chartData.wind[i], chartData.windUnit, "misc")}
-									</Typography>
-								</Box>
-								<Box sx={{ display: "flex", flexDirection: "row" }}>
-									<Tooltip placement="left" title="UV" arrow>
-										<SolarPowerIcon sx={{ mr: 0.5, fontSize: 15 }} />
-									</Tooltip>
-									<Typography sx={{ textTransform: "none" }} fontSize={12}>
-										{formatWeatherData(chartData.uv[i], undefined, "unitless")}
-									</Typography>
-								</Box>
-								<Box sx={{ display: "flex", flexDirection: "row" }}>
-									<Tooltip placement="left" title="air quality" arrow>
-										<MasksIcon sx={{ mr: 0.5, fontSize: 15 }} />
-									</Tooltip>
-									<Typography sx={{ textTransform: "none" }} fontSize={12}>
-										{formatWeatherData(chartData.aqi[i], undefined, "unitless")}
-									</Typography>
-								</Box>
-							</Box>
-						</ToggleButton>
-					))}
-				</ToggleButtonGroup>
-			</Paper>
-			<Paper sx={{ pt: 3 }}>
-				{[
-					filteredTempSeries,
-					filteredPrecipitationSeries,
-					filtereWindSeries,
-					filteredUvSeries,
-					filteredAqiSeries,
-				].map((c) => {
-					return (
-						c.length > 0 && (
-							<LineChart
-								key={c[0].label}
-								xAxis={[
-									{
-										data: chartData.hours,
-										scaleType: "time",
-										tickMinStep: 3600 * 1000 * 4,
-										valueFormatter: dateValueFormatter,
-										min: Number(chartData.hours[0]),
-										max: Number(chartData.hours[24]),
-									},
-								]}
-								yAxis={[
-									{
-										id: "linearAxis",
-										scaleType: "linear",
-										min: c[0].label === "air quality" ? 0 : undefined,
-									},
-								]}
-								series={c}
-								leftAxis="linearAxis"
-								height={180}
-								sx={{
-									"--ChartsLegend-itemMarkSize": "10px",
-									"--ChartsLegend-rootOffsetX": "7em",
-									"--ChartsLegend-rootOffsetY": "-1em",
-								}}
-								legend={{
-									direction: "column",
-									position: {
-										vertical: "top",
-										horizontal: "left",
-									},
-								}}
-								margin={{
-									top: 50,
-									bottom: 30,
-									left: 40,
-									right: 40,
-								}}
-								axisHighlight={{
-									x: "band",
-									y: "none",
-								}}
-							/>
-						)
-					);
-				})}
-			</Paper>
-		</>
+				<Paper sx={{ pt: 3 }}>
+					{[
+						filteredTempSeries,
+						filteredPrecipitationSeries,
+						filtereWindSeries,
+						filteredUvSeries,
+						filteredAqiSeries,
+					].map((c) => {
+						return (
+							c.length > 0 && (
+								<LineChart
+									key={c[0].label}
+									xAxis={[
+										{
+											data: chartData.hours,
+											scaleType: "time",
+											tickMinStep: 3600 * 1000 * 4,
+											valueFormatter: dateValueFormatter,
+											min: Number(chartData.hours[0]),
+											max: Number(chartData.hours[24]),
+										},
+									]}
+									yAxis={[
+										{
+											id: "linearAxis",
+											scaleType: "linear",
+											min: c[0].label === "air quality" ? 0 : undefined,
+										},
+									]}
+									series={c}
+									leftAxis="linearAxis"
+									height={180}
+									sx={{
+										"--ChartsLegend-itemMarkSize": "10px",
+										"--ChartsLegend-rootOffsetX": "7em",
+										"--ChartsLegend-rootOffsetY": "-1em",
+									}}
+									legend={{
+										direction: "column",
+										position: {
+											vertical: "top",
+											horizontal: "left",
+										},
+									}}
+									margin={{
+										top: 50,
+										bottom: 30,
+										left: 40,
+										right: 40,
+									}}
+									axisHighlight={{
+										x: "band",
+										y: "none",
+									}}
+								/>
+							)
+						);
+					})}
+				</Paper>
+			</>
+		)
 	);
 }
