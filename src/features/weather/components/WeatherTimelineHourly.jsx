@@ -14,6 +14,12 @@ import WaterDropIcon from "@mui/icons-material/WaterDrop";
 import AirIcon from "@mui/icons-material/Air";
 import SolarPowerIcon from "@mui/icons-material/SolarPower";
 import MasksIcon from "@mui/icons-material/Masks";
+import CompressIcon from "@mui/icons-material/Compress";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
+import AcUnitIcon from "@mui/icons-material/AcUnit";
+import CloudIcon from "@mui/icons-material/Cloud";
+import InvertColorsIcon from "@mui/icons-material/InvertColors";
 
 import { formatWeatherData } from "../../../utils/formatWeatherData";
 
@@ -77,67 +83,164 @@ const WeatherTimelineHourly = ({ chartData, hourSelection, handleHourChange, day
 							role="img"
 						></Icon>
 
+						<Typography
+							sx={{
+								textTransform: "none",
+								fontSize: 12,
+								mb: 1,
+								height: "3em",
+								display: "flex",
+								alignItems: "center",
+							}}
+						>
+							{formatWeatherData(chartData.weathercode[i], undefined, "weather description")}
+						</Typography>
+
 						<Box
 							sx={{
 								display: "flex",
-								justifyContent: "center",
+								flexDirection: "row",
+								justifyContent: hourSelection === hour ? "space-between" : "center",
 								width: "100%",
-								flexDirection: "column",
 							}}
 						>
-							<Box sx={{ display: "flex", flexDirection: "row" }}>
-								<Tooltip placement="left" title="temperature" arrow>
-									<ThermostatIcon sx={{ mr: 0.5, fontSize: 15 }} />
-								</Tooltip>
-								<Typography fontSize={12}>
-									{formatWeatherData(chartData.temperature[i], undefined, "degree")}
-								</Typography>
+							<Box
+								sx={{
+									display: "flex",
+									justifyContent: "center",
+									flexDirection: "column",
+								}}
+							>
+								<Box sx={{ display: "flex", flexDirection: "row" }}>
+									<Tooltip placement="left" title="temperature" arrow>
+										<ThermostatIcon sx={{ mr: 0.5, fontSize: 15 }} />
+									</Tooltip>
+									<Typography sx={{ textTransform: "none" }} fontSize={12}>
+										{formatWeatherData(chartData.temperature[i], undefined, "degree")}
+									</Typography>
+								</Box>
+
+								<Box sx={{ display: "flex", flexDirection: "row" }}>
+									<Tooltip placement="left" title="feels like" arrow>
+										<SensorOccupiedIcon sx={{ mr: 0.5, fontSize: 15 }} />
+									</Tooltip>
+									<Typography sx={{ textTransform: "none" }} fontSize={12}>
+										{formatWeatherData(chartData.feelsLike[i], undefined, "degree")}
+									</Typography>
+								</Box>
+
+								<Box sx={{ display: "flex", flexDirection: "row" }}>
+									<Tooltip placement="left" title="precipitation chance" arrow>
+										<WaterDropIcon sx={{ mr: 0.5, fontSize: 15 }} />
+									</Tooltip>
+									<Typography sx={{ textTransform: "none" }} fontSize={12}>
+										{formatWeatherData(chartData.precipitation[i], undefined, "percentage")}
+									</Typography>
+								</Box>
+
+								<Box sx={{ display: "flex", flexDirection: "row" }}>
+									<Tooltip placement="left" title="wind speed" arrow>
+										<AirIcon sx={{ mr: 0.5, fontSize: 15 }} />
+									</Tooltip>
+									<Typography sx={{ textTransform: "none" }} fontSize={12}>
+										{formatWeatherData(chartData.wind[i], chartData.windUnit, "misc")}
+									</Typography>
+								</Box>
+
+								<Box sx={{ display: "flex", flexDirection: "row" }}>
+									<Tooltip placement="left" title="UV" arrow>
+										<SolarPowerIcon sx={{ mr: 0.5, fontSize: 15 }} />
+									</Tooltip>
+									<Typography sx={{ textTransform: "none" }} fontSize={12}>
+										{formatWeatherData(chartData.uv[i], undefined, "unitless")}
+									</Typography>
+								</Box>
+
+								<Box sx={{ display: "flex", flexDirection: "row" }}>
+									<Tooltip placement="left" title="air quality" arrow>
+										<MasksIcon sx={{ mr: 0.5, fontSize: 15 }} />
+									</Tooltip>
+									<Typography sx={{ textTransform: "none" }} fontSize={12}>
+										{formatWeatherData(chartData.aqi[i], undefined, "unitless")}
+									</Typography>
+								</Box>
 							</Box>
 
-							<Box sx={{ display: "flex", flexDirection: "row" }}>
-								<Tooltip placement="left" title="feels like" arrow>
-									<SensorOccupiedIcon sx={{ mr: 0.5, fontSize: 15 }} />
-								</Tooltip>
-								<Typography sx={{ textTransform: "none" }} fontSize={12}>
-									{formatWeatherData(chartData.feelsLike[i], undefined, "degree")}
-								</Typography>
-							</Box>
+							{hourSelection === hour && (
+								<Box
+									sx={{
+										display: "flex",
+										justifyContent: "center",
+										flexDirection: "column",
+									}}
+								>
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										<Tooltip placement="left" title="surface pressure" arrow>
+											<CompressIcon sx={{ mr: 0.5, fontSize: 15 }} />
+										</Tooltip>
+										<Typography sx={{ textTransform: "none" }} fontSize={12}>
+											{formatWeatherData(chartData.pressure[i], "hPa", "misc integer")}
+										</Typography>
+									</Box>
 
-							<Box sx={{ display: "flex", flexDirection: "row" }}>
-								<Tooltip placement="left" title="precipitation chance" arrow>
-									<WaterDropIcon sx={{ mr: 0.5, fontSize: 15 }} />
-								</Tooltip>
-								<Typography sx={{ textTransform: "none" }} fontSize={12}>
-									{formatWeatherData(chartData.precipitation[i], undefined, "percentage")}
-								</Typography>
-							</Box>
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										<Tooltip placement="left" title="visibility" arrow>
+											<VisibilityIcon sx={{ mr: 0.5, fontSize: 15 }} />
+										</Tooltip>
+										<Typography sx={{ textTransform: "none" }} fontSize={12}>
+											{formatWeatherData(
+												chartData.visibility[i],
+												chartData.visibilityUnit,
+												"misc integer"
+											)}
+										</Typography>
+									</Box>
 
-							<Box sx={{ display: "flex", flexDirection: "row" }}>
-								<Tooltip placement="left" title="wind speed" arrow>
-									<AirIcon sx={{ mr: 0.5, fontSize: 15 }} />
-								</Tooltip>
-								<Typography sx={{ textTransform: "none" }} fontSize={12}>
-									{formatWeatherData(chartData.wind[i], chartData.windUnit, "misc")}
-								</Typography>
-							</Box>
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										<Tooltip placement="left" title="precipitation quantity" arrow>
+											<FormatColorFillIcon sx={{ mr: 0.5, fontSize: 15 }} />
+										</Tooltip>
+										<Typography sx={{ textTransform: "none" }} fontSize={12}>
+											{formatWeatherData(
+												chartData.precipitationQty[i],
+												chartData.precipitationQtyUnit,
+												"misc integer"
+											)}
+										</Typography>
+									</Box>
 
-							<Box sx={{ display: "flex", flexDirection: "row" }}>
-								<Tooltip placement="left" title="UV" arrow>
-									<SolarPowerIcon sx={{ mr: 0.5, fontSize: 15 }} />
-								</Tooltip>
-								<Typography sx={{ textTransform: "none" }} fontSize={12}>
-									{formatWeatherData(chartData.uv[i], undefined, "unitless")}
-								</Typography>
-							</Box>
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										<Tooltip placement="left" title="snow depth" arrow>
+											<AcUnitIcon sx={{ mr: 0.5, fontSize: 15 }} />
+										</Tooltip>
+										<Typography sx={{ textTransform: "none" }} fontSize={12}>
+											{formatWeatherData(
+												chartData.snowDepth[i],
+												chartData.visibilityUnit,
+												"misc"
+											)}
+										</Typography>
+									</Box>
 
-							<Box sx={{ display: "flex", flexDirection: "row" }}>
-								<Tooltip placement="left" title="air quality" arrow>
-									<MasksIcon sx={{ mr: 0.5, fontSize: 15 }} />
-								</Tooltip>
-								<Typography sx={{ textTransform: "none" }} fontSize={12}>
-									{formatWeatherData(chartData.aqi[i], undefined, "unitless")}
-								</Typography>
-							</Box>
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										<Tooltip placement="left" title="cloud cover" arrow>
+											<CloudIcon sx={{ mr: 0.5, fontSize: 15 }} />
+										</Tooltip>
+										<Typography sx={{ textTransform: "none" }} fontSize={12}>
+											{formatWeatherData(chartData.cloudcover[i], undefined, "percentage")}
+										</Typography>
+									</Box>
+
+									<Box sx={{ display: "flex", flexDirection: "row" }}>
+										<Tooltip placement="left" title="dew point" arrow>
+											<InvertColorsIcon sx={{ mr: 0.5, fontSize: 15 }} />
+										</Tooltip>
+										<Typography sx={{ textTransform: "none" }} fontSize={12}>
+											{formatWeatherData(chartData.dew[i], undefined, "degree")}
+										</Typography>
+									</Box>
+								</Box>
+							)}
 						</Box>
 					</ToggleButton>
 				))}

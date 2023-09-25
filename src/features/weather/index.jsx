@@ -74,6 +74,15 @@ const Weather = () => {
 			const uv = data.hourly.uv_index.slice(start, end + 1);
 			const aqi = data.aqi.hourly.european_aqi.slice(start, end + 1);
 			const weathercode = data.hourly.weathercode.slice(start, end + 1);
+			const dew = data.hourly.dewpoint_2m.slice(start, end + 1);
+			const cloudcover = data.hourly.cloudcover.slice(start, end + 1);
+			const precipitationQty = data.hourly.precipitation.slice(start, end + 1);
+			const precipitationQtyUnit = data.hourly_units.precipitation;
+
+			const snowDepth = data.hourly.snow_depth.slice(start, end + 1);
+			const pressure = data.hourly.surface_pressure.slice(start, end + 1);
+			const visibility = data.hourly.visibility.slice(start, end + 1);
+			const visibilityUnit = data.hourly_units.visibility;
 
 			setChartData({
 				hours,
@@ -85,6 +94,14 @@ const Weather = () => {
 				uv,
 				aqi,
 				weathercode,
+				dew,
+				cloudcover,
+				precipitationQty,
+				precipitationQtyUnit,
+				snowDepth,
+				pressure,
+				visibility,
+				visibilityUnit,
 			});
 		}
 	}, [data, daySelection]);

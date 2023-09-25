@@ -101,6 +101,19 @@ const WeatherTimelineDaily = ({ data, daySelection, handleDayChange }) => {
 							></Icon>
 						)}
 
+						<Typography
+							sx={{
+								textTransform: "none",
+								fontSize: 12,
+								mb: 1,
+								height: "3em",
+								display: "flex",
+								alignItems: "center",
+							}}
+						>
+							{formatWeatherData(data.daily.weathercode[i], undefined, "weather description")}
+						</Typography>
+
 						<Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
 							<Typography fontSize={15}>
 								{formatWeatherData(data.daily.temperature_2m_min[i], undefined, "degree")}
