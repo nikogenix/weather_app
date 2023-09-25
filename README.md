@@ -132,9 +132,9 @@
             -   [ ] c/a panel
         -   [ ] hourly/daily
             -   [x] daily timeline
-            -   [ ] hourly weather
+            -   [x] hourly weather
                 -   [x] graph
-                -   [ ] timeline
+                -   [x] timeline
             -   [ ] c/a recommendations in the details section for each day
         -   [ ] warnings for severe weather conditions
     -   [ ] trip page
