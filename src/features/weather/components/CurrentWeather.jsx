@@ -4,6 +4,8 @@ import { Box, Card, CardContent, CardHeader, Icon, Typography } from "@mui/mater
 import CurrentWeatherDetail from "./CurrentWeatherDetail";
 
 import { formatWeatherData } from "../../../utils/formatWeatherData";
+import AirQualityTable from "./AirQualityTable";
+import UvIndexTable from "./UvIndexTable";
 
 const CurrentWeather = ({ data, selectedTime, forecastStartIndex, weatherWarning }) => {
 	return (
@@ -128,6 +130,7 @@ const CurrentWeather = ({ data, selectedTime, forecastStartIndex, weatherWarning
 							value={data.aqi.hourly.european_aqi[forecastStartIndex]}
 							unit={data.aqi.hourly_units.european_aqi}
 							type={"aqi"}
+							tooltip={<AirQualityTable value={data.aqi.hourly.european_aqi[forecastStartIndex]} />}
 						/>
 						<CurrentWeatherDetail
 							header="wind"
@@ -154,6 +157,7 @@ const CurrentWeather = ({ data, selectedTime, forecastStartIndex, weatherWarning
 							header="UV index"
 							value={data.hourly.uv_index[forecastStartIndex]}
 							type={"unitless"}
+							tooltip={<UvIndexTable value={data.hourly.uv_index[forecastStartIndex]} />}
 						/>
 						<CurrentWeatherDetail
 							header="surface pressure"
