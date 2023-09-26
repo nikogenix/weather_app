@@ -128,7 +128,7 @@
     -   [ ] home page
         -   [ ] current time
             -   [x] weather panel
-                -   [ ] wind direction icon
+                -   [x] wind direction icon
             -   [ ] c/a panel
         -   [ ] hourly/daily
             -   [x] daily timeline
