@@ -70,6 +70,7 @@ const Weather = () => {
 			const feelsLike = data.hourly.apparent_temperature.slice(start, end + 1);
 			const precipitation = data.hourly.precipitation_probability.slice(start, end + 1);
 			const wind = data.hourly.windspeed_10m.slice(start, end + 1);
+			const windDirection = data.hourly.winddirection_10m.slice(start, end + 1);
 			const windUnit = data.hourly_units.windspeed_10m;
 			const uv = data.hourly.uv_index.slice(start, end + 1);
 			const aqi = data.aqi.hourly.european_aqi.slice(start, end + 1);
@@ -102,6 +103,7 @@ const Weather = () => {
 				pressure,
 				visibility,
 				visibilityUnit,
+				windDirection,
 			});
 		}
 	}, [data, daySelection]);

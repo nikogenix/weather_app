@@ -143,7 +143,17 @@ const WeatherTimelineHourly = ({ chartData, hourSelection, handleHourChange, day
 										<AirIcon sx={{ mr: 0.5, fontSize: 15 }} />
 									</Tooltip>
 									<Typography sx={{ textTransform: "none" }} fontSize={12}>
-										{formatWeatherData(chartData.wind[i], chartData.windUnit, "misc")}
+										{formatWeatherData(chartData.wind[i], chartData.windUnit, "misc")}{" "}
+										{hourSelection === hour && (
+											<Icon
+												component="i"
+												sx={{ fontSize: 15, overflow: "visible", width: "min-content" }}
+												baseClassName={`wi wi-wind towards-${chartData.windDirection[i]}-deg`}
+												aria-hidden={false}
+												aria-label={`wind icon - towards ${chartData.windDirection[i]} degrees`}
+												role="img"
+											></Icon>
+										)}
 									</Typography>
 								</Box>
 

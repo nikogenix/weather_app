@@ -133,9 +133,9 @@ const CurrentWeather = ({ data, selectedTime, forecastStartIndex, weatherWarning
 							header="wind"
 							value={data.hourly.windspeed_10m[forecastStartIndex]}
 							unit={data.daily_units.windspeed_10m_max}
+							secondaryValue={data.hourly.winddirection_10m[forecastStartIndex]}
 							type={"misc"}
 						/>
-						{/* WIP wind direction icon */}
 						<CurrentWeatherDetail
 							header="humidity"
 							value={data.hourly.relativehumidity_2m[forecastStartIndex]}
