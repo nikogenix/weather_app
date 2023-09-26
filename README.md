@@ -143,7 +143,9 @@
         -   [ ] display weather & c/a next to each trip location
         -   [ ] c/a overview panel for the whole trip
     -   [ ] others
-        -   [ ] tooltip for aqi ranges
+        -   [x] tooltips
+            -   [x] aqi ranges
+            -   [x] uv
 -   [x] footer
     -   [x] scroll animation
 -   [ ] others
