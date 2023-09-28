@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { Link } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -80,7 +81,13 @@ const ResponsiveAppBar = () => {
 		dispatch(setWeather({ ...data, location, aqi }));
 	};
 
-	const isSmallScreen = window.innerWidth < 600;
+	const isSmallScreen = useMediaQuery("only screen and (max-width : 599px)");
+
+	useEffect(() => {
+		handleCloseNavMenu();
+		handleCloseSettingsMenu();
+		handleCloseUserMenu();
+	}, [isSmallScreen]);
 
 	return (
 		<AppBar position="sticky" color="primary">
