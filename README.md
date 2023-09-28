@@ -112,7 +112,7 @@
         -   [x] refetch API data upon changing the preference
     -   [ ] user menu
         -   [x] menu UI
-        -   [ ] login/signup UI
+        -   [x] login/signup UI
         -   [ ] auth functionality
         -   [ ] settings UI
             -   [ ] dark/light mode
