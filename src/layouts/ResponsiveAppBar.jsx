@@ -26,7 +26,10 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import getWeather from "../services/getWeather";
 import { setWeather } from "../features/weather/weatherSlice";
 
-const userMenu = ["preferences", "logout"];
+import Settings from "../features/settings";
+import Login from "../features/login";
+
+const userMenu = [{ name: "preferences" }, { name: "login" }, { name: "logout" }];
 const pages = [
 	{ name: "home", path: "/" },
 	{ name: "plan a trip", path: "/trip" },
@@ -47,8 +50,11 @@ const ResponsiveAppBar = () => {
 	const handleOpenUserMenu = (event) => {
 		setAnchorElUser(event.currentTarget);
 	};
-	const handleCloseUserMenu = () => {
+	const handleCloseUserMenu = (button) => {
+		const menuStatus = anchorElUser;
 		setAnchorElUser(null);
+		if (button === "preferences" && menuStatus) handleOpenFullSettingsMenu();
+		if (button === "login" && menuStatus) handleOpenLoginModal();
 	};
 
 	const [anchorElSettings, setAnchorElSettings] = useState(null);
@@ -59,12 +65,20 @@ const ResponsiveAppBar = () => {
 		setAnchorElSettings(null);
 	};
 
-	const [settingsMenu, setSettingsMenu] = useState(null);
-	const handleOpenFullSettingsMenu = (event) => {
-		setSettingsMenu(event.currentTarget);
+	const [settingsMenu, setSettingsMenu] = useState(false);
+	const handleOpenFullSettingsMenu = () => {
+		setSettingsMenu(true);
 	};
 	const handleCloseFullSettingsMenu = () => {
-		setSettingsMenu(null);
+		setSettingsMenu(false);
+	};
+
+	const [loginModal, setLoginModal] = useState(false);
+	const handleOpenLoginModal = () => {
+		setLoginModal(true);
+	};
+	const handleCloseLoginModal = () => {
+		setLoginModal(false);
 	};
 
 	const darkMode = useSelector((state) => state.settings.darkMode);
@@ -87,6 +101,7 @@ const ResponsiveAppBar = () => {
 		handleCloseNavMenu();
 		handleCloseSettingsMenu();
 		handleCloseUserMenu();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isSmallScreen]);
 
 	return (
@@ -138,7 +153,7 @@ const ResponsiveAppBar = () => {
 								onClick={handleCloseNavMenu}
 								component={Link}
 								to={page.path}
-								sx={{ my: 2, color: "white", display: "block" }}
+								sx={{ my: 2, color: "white", display: "block", textTransform: "none" }}
 							>
 								{page.name}
 							</Button>
@@ -184,8 +199,8 @@ const ResponsiveAppBar = () => {
 								onClose={handleCloseUserMenu}
 							>
 								{userMenu.map((setting) => (
-									<MenuItem key={setting} onClick={handleCloseUserMenu}>
-										<Typography textAlign="center">{setting}</Typography>
+									<MenuItem key={setting.name} onClick={() => handleCloseUserMenu(setting.name)}>
+										<Typography textAlign="center">{setting.name}</Typography>
 									</MenuItem>
 								))}
 							</Menu>
@@ -249,14 +264,17 @@ const ResponsiveAppBar = () => {
 									onClose={handleCloseUserMenu}
 								>
 									{userMenu.map((setting) => (
-										<MenuItem key={setting} onClick={handleCloseUserMenu}>
-											<Typography textAlign="center">{setting}</Typography>
+										<MenuItem key={setting.name} onClick={() => handleCloseUserMenu(setting.name)}>
+											<Typography textAlign="center">{setting.name}</Typography>
 										</MenuItem>
 									))}
 								</Menu>
 							</Menu>
 						</Box>
 					)}
+
+					<Settings open={settingsMenu} handleClose={handleCloseFullSettingsMenu} />
+					<Login open={loginModal} handleClose={handleCloseLoginModal} />
 				</Toolbar>
 			</Container>
 		</AppBar>
