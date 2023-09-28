@@ -51,12 +51,19 @@ const ResponsiveAppBar = () => {
 	};
 
 	const [anchorElSettings, setAnchorElSettings] = useState(null);
-
 	const handleOpenSettingsMenu = (event) => {
 		setAnchorElSettings(event.currentTarget);
 	};
 	const handleCloseSettingsMenu = () => {
 		setAnchorElSettings(null);
+	};
+
+	const [settingsMenu, setSettingsMenu] = useState(null);
+	const handleOpenFullSettingsMenu = (event) => {
+		setSettingsMenu(event.currentTarget);
+	};
+	const handleCloseFullSettingsMenu = () => {
+		setSettingsMenu(null);
 	};
 
 	const darkMode = useSelector((state) => state.settings.darkMode);
@@ -72,6 +79,8 @@ const ResponsiveAppBar = () => {
 		console.log(location);
 		dispatch(setWeather({ ...data, location, aqi }));
 	};
+
+	const isSmallScreen = window.innerWidth < 600;
 
 	return (
 		<AppBar position="sticky" color="primary">
@@ -133,70 +142,8 @@ const ResponsiveAppBar = () => {
 						<SearchForm />
 					</Box>
 
-					<Box sx={{ flexGrow: 0, flexShrink: 0, display: { xs: "none", sm: "flex" } }}>
-						<IconButton onClick={handleTemperatureUnitChange} color="inherit">
-							<>
-								<DeviceThermostatIcon /> <Typography>°{temperatureUnit}</Typography>
-							</>
-						</IconButton>
-
-						<IconButton sx={{ mr: 1 }} onClick={handleColorModeChange} color="inherit">
-							{darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
-						</IconButton>
-
-						<Tooltip title="open menu">
-							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-								<Avatar alt="N" src="/static/images/avatar/2.jpg" />
-							</IconButton>
-						</Tooltip>
-						<Menu
-							sx={{ mt: "45px" }}
-							id="menu-appbar"
-							anchorEl={anchorElUser}
-							anchorOrigin={{
-								vertical: "top",
-								horizontal: "left",
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: "top",
-								horizontal: "left",
-							}}
-							disableScrollLock={true}
-							open={Boolean(anchorElUser)}
-							onClose={handleCloseUserMenu}
-						>
-							{userMenu.map((setting) => (
-								<MenuItem key={setting} onClick={handleCloseUserMenu}>
-									<Typography textAlign="center">{setting}</Typography>
-								</MenuItem>
-							))}
-						</Menu>
-					</Box>
-
-					<Box sx={{ flexGrow: 0, flexShrink: 0, display: { xs: "flex", sm: "none" } }}>
-						<Tooltip title="open settings">
-							<IconButton onClick={handleOpenSettingsMenu} sx={{ p: 0 }}>
-								<SettingsIcon />
-							</IconButton>
-						</Tooltip>
-						<Menu
-							sx={{ mt: "45px" }}
-							id="mobile-menu-appbar"
-							anchorEl={anchorElSettings}
-							anchorOrigin={{
-								vertical: "top",
-								horizontal: "left",
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: "top",
-								horizontal: "left",
-							}}
-							disableScrollLock={true}
-							open={Boolean(anchorElSettings)}
-							onClose={handleCloseSettingsMenu}
-						>
+					{!isSmallScreen && (
+						<Box sx={{ flexGrow: 0, flexShrink: 0, display: "flex" }}>
 							<IconButton onClick={handleTemperatureUnitChange} color="inherit">
 								<>
 									<DeviceThermostatIcon /> <Typography>°{temperatureUnit}</Typography>
@@ -235,8 +182,74 @@ const ResponsiveAppBar = () => {
 									</MenuItem>
 								))}
 							</Menu>
-						</Menu>
-					</Box>
+						</Box>
+					)}
+
+					{isSmallScreen && (
+						<Box sx={{ flexGrow: 0, flexShrink: 0, display: "flex" }}>
+							<Tooltip title="open settings">
+								<IconButton onClick={handleOpenSettingsMenu} sx={{ p: 0 }}>
+									<SettingsIcon />
+								</IconButton>
+							</Tooltip>
+							<Menu
+								sx={{ mt: "45px" }}
+								id="mobile-menu-appbar"
+								anchorEl={anchorElSettings}
+								anchorOrigin={{
+									vertical: "top",
+									horizontal: "left",
+								}}
+								keepMounted
+								transformOrigin={{
+									vertical: "top",
+									horizontal: "left",
+								}}
+								disableScrollLock={true}
+								open={Boolean(anchorElSettings)}
+								onClose={handleCloseSettingsMenu}
+							>
+								<IconButton onClick={handleTemperatureUnitChange} color="inherit">
+									<>
+										<DeviceThermostatIcon /> <Typography>°{temperatureUnit}</Typography>
+									</>
+								</IconButton>
+
+								<IconButton sx={{ mr: 1 }} onClick={handleColorModeChange} color="inherit">
+									{darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+								</IconButton>
+
+								<Tooltip title="open menu">
+									<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+										<Avatar alt="N" src="/static/images/avatar/2.jpg" />
+									</IconButton>
+								</Tooltip>
+								<Menu
+									sx={{ mt: "45px" }}
+									id="menu-appbar"
+									anchorEl={anchorElUser}
+									anchorOrigin={{
+										vertical: "top",
+										horizontal: "left",
+									}}
+									keepMounted
+									transformOrigin={{
+										vertical: "top",
+										horizontal: "left",
+									}}
+									disableScrollLock={true}
+									open={Boolean(anchorElUser)}
+									onClose={handleCloseUserMenu}
+								>
+									{userMenu.map((setting) => (
+										<MenuItem key={setting} onClick={handleCloseUserMenu}>
+											<Typography textAlign="center">{setting}</Typography>
+										</MenuItem>
+									))}
+								</Menu>
+							</Menu>
+						</Box>
+					)}
 				</Toolbar>
 			</Container>
 		</AppBar>
