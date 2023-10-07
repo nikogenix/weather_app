@@ -1,4 +1,5 @@
 import { Box, Modal, Typography } from "@mui/material";
+import WeatherRecommendationIcon from "../../components/WeatherRecommendationIcon";
 
 const style = {
 	position: "absolute",
@@ -27,6 +28,7 @@ const Settings = ({ open, handleClose }) => {
 				<Typography id="modal-modal-description" sx={{ mt: 2 }}>
 					Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
 				</Typography>
+				<WeatherRecommendationIcon iconName="Boots" size={200} />
 			</Box>
 		</Modal>
 	);
