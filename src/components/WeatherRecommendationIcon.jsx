@@ -1,4 +1,4 @@
-import { SvgIcon } from "@mui/material";
+import { SvgIcon, Tooltip } from "@mui/material";
 
 import { ReactComponent as Boots } from "../assets/icons/Boots.svg";
 import { ReactComponent as LongSleeve } from "../assets/icons/LongSleeve.svg";
@@ -68,9 +68,12 @@ const WeatherRecommendationIcon = ({ iconName, size, color }) => {
 	if (!IconComponent) return <>missing icon</>;
 
 	return (
-		<SvgIcon viewBox="0 0 40 40" style={{ fontSize: size, color }}>
-			<IconComponent style={{ fontSize: size }} />
-		</SvgIcon>
+		<Tooltip title="">
+			{/* TODO: aria labels & tooltip */}
+			<SvgIcon viewBox="0 0 40 40" style={{ fontSize: size, color }}>
+				<IconComponent style={{ fontSize: size }} />
+			</SvgIcon>
+		</Tooltip>
 	);
 };
 
