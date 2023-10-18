@@ -28,6 +28,7 @@ import { setWeather } from "../features/weather/weatherSlice";
 
 import Settings from "../features/settings";
 import Login from "../features/login";
+import { Divider } from "@mui/material";
 
 const userMenu = [{ name: "preferences" }, { name: "login" }, { name: "logout" }];
 const pages = [
@@ -114,8 +115,8 @@ const ResponsiveAppBar = () => {
 							aria-label="account of current user"
 							aria-controls="menu-appbar"
 							aria-haspopup="true"
-							onClick={handleOpenNavMenu}
 							color="inherit"
+							onClick={handleOpenNavMenu}
 						>
 							<MenuIcon />
 						</IconButton>
@@ -136,12 +137,23 @@ const ResponsiveAppBar = () => {
 							onClose={handleCloseNavMenu}
 							sx={{
 								display: { xs: "block", md: "none" },
+								mt: 1.1,
+								translate: "-15px 0",
 							}}
 						>
-							{pages.map((page) => (
-								<MenuItem key={page.name} onClick={handleCloseNavMenu} component={Link} to={page.path}>
-									<Typography textAlign="center">{page.name}</Typography>
-								</MenuItem>
+							{pages.map((page, i) => (
+								<Box key={page.name}>
+									<MenuItem
+										key={page.name}
+										onClick={handleCloseNavMenu}
+										component={Link}
+										to={page.path}
+										sx={{ px: 3 }}
+									>
+										<Typography textAlign="center">{page.name}</Typography>
+									</MenuItem>
+									{i !== pages.length - 1 && <Divider sx={{ marginTop: 0 }} />}
+								</Box>
 							))}
 						</Menu>
 					</Box>
@@ -182,26 +194,34 @@ const ResponsiveAppBar = () => {
 								</IconButton>
 							</Tooltip>
 							<Menu
-								sx={{ mt: "45px" }}
+								sx={{ mt: 7.2, justifyContent: "flex-end", translate: "15px 0" }}
 								id="menu-appbar"
 								anchorEl={anchorElUser}
 								anchorOrigin={{
 									vertical: "top",
-									horizontal: "left",
+									horizontal: "right",
 								}}
 								keepMounted
 								transformOrigin={{
 									vertical: "top",
-									horizontal: "left",
+									horizontal: "right",
 								}}
 								disableScrollLock={true}
 								open={Boolean(anchorElUser)}
 								onClose={handleCloseUserMenu}
 							>
-								{userMenu.map((setting) => (
-									<MenuItem key={setting.name} onClick={() => handleCloseUserMenu(setting.name)}>
-										<Typography textAlign="center">{setting.name}</Typography>
-									</MenuItem>
+								{userMenu.map((setting, i) => (
+									<Box key={setting.name}>
+										<MenuItem
+											onClick={() => handleCloseUserMenu(setting.name)}
+											sx={{ px: 3, justifyContent: "flex-end" }}
+										>
+											<Typography variant="caption" fontSize={15}>
+												{setting.name}
+											</Typography>
+										</MenuItem>
+										{i !== userMenu.length - 1 && <Divider sx={{ marginTop: 0 }} />}
+									</Box>
 								))}
 							</Menu>
 						</Box>
@@ -210,12 +230,20 @@ const ResponsiveAppBar = () => {
 					{isSmallScreen && (
 						<Box sx={{ flexGrow: 0, flexShrink: 0, display: "flex" }}>
 							<Tooltip title="open settings">
-								<IconButton onClick={handleOpenSettingsMenu} sx={{ p: 0 }}>
+								<IconButton
+									onClick={handleOpenSettingsMenu}
+									sx={{ p: 1 }}
+									size="large"
+									aria-label="settings button"
+									aria-controls="mobile-menu-appbar"
+									aria-haspopup="true"
+									color="inherit"
+								>
 									<SettingsIcon />
 								</IconButton>
 							</Tooltip>
 							<Menu
-								sx={{ mt: "45px" }}
+								sx={{ mt: 5.6, translate: "15px 0" }}
 								id="mobile-menu-appbar"
 								anchorEl={anchorElSettings}
 								anchorOrigin={{
@@ -231,7 +259,7 @@ const ResponsiveAppBar = () => {
 								open={Boolean(anchorElSettings)}
 								onClose={handleCloseSettingsMenu}
 							>
-								<IconButton onClick={handleTemperatureUnitChange} color="inherit">
+								<IconButton sx={{ ml: 2 }} onClick={handleTemperatureUnitChange} color="inherit">
 									<>
 										<DeviceThermostatIcon /> <Typography>°{temperatureUnit}</Typography>
 									</>
@@ -242,12 +270,20 @@ const ResponsiveAppBar = () => {
 								</IconButton>
 
 								<Tooltip title="open menu">
-									<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+									<IconButton
+										size="large"
+										aria-label="account of current user"
+										aria-controls="menu-appbar"
+										aria-haspopup="true"
+										color="inherit"
+										onClick={handleOpenUserMenu}
+										sx={{ p: 0, mr: 2 }}
+									>
 										<Avatar alt="N" src="/static/images/avatar/2.jpg" />
 									</IconButton>
 								</Tooltip>
 								<Menu
-									sx={{ mt: "45px" }}
+									sx={{ mt: 6.7, translate: "15px 0" }}
 									id="menu-appbar"
 									anchorEl={anchorElUser}
 									anchorOrigin={{
@@ -263,10 +299,18 @@ const ResponsiveAppBar = () => {
 									open={Boolean(anchorElUser)}
 									onClose={handleCloseUserMenu}
 								>
-									{userMenu.map((setting) => (
-										<MenuItem key={setting.name} onClick={() => handleCloseUserMenu(setting.name)}>
-											<Typography textAlign="center">{setting.name}</Typography>
-										</MenuItem>
+									{userMenu.map((setting, i) => (
+										<Box key={setting.name}>
+											<MenuItem
+												onClick={() => handleCloseUserMenu(setting.name)}
+												sx={{ px: 3, justifyContent: "flex-end" }}
+											>
+												<Typography variant="caption" fontSize={15}>
+													{setting.name}
+												</Typography>
+											</MenuItem>
+											{i !== userMenu.length - 1 && <Divider sx={{ marginTop: 0 }} />}
+										</Box>
 									))}
 								</Menu>
 							</Menu>
