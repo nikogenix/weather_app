@@ -106,7 +106,7 @@ const ResponsiveAppBar = () => {
 
 	return (
 		<AppBar position="sticky" color="primary">
-			<Container maxWidth="xl">
+			<Container maxWidth="xl" style={{ paddingLeft: "2%", paddingRight: "2%" }}>
 				<Toolbar disableGutters>
 					<Box sx={{ flexGrow: 2, display: { xs: "flex", md: "none" } }}>
 						<IconButton

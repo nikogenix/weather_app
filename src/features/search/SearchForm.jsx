@@ -22,7 +22,11 @@ const SearchForm = () => {
 	};
 
 	return (
-		<Paper component="div" sx={{ p: "2px 4px", display: "flex", alignItems: "center", maxWidth: 400 }}>
+		<Paper
+			component="div"
+			sx={{ p: "2px 4px", display: "flex", alignItems: "center", maxWidth: 400, minWidth: "30vw" }}
+			id="autocomplete-form"
+		>
 			<CombinedPicker></CombinedPicker>
 
 			<Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
