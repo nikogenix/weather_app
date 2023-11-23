@@ -1,6 +1,6 @@
 import { Input } from "@mui/material";
 
-const NumberInputWithCustomArrows = ({ value, onChange, disabled }) => {
+const NumberInputWithVariableWidth = ({ value, onChange, disabled }) => {
 	return (
 		<>
 			<Input
@@ -22,4 +22,4 @@ const NumberInputWithCustomArrows = ({ value, onChange, disabled }) => {
 	);
 };
 
-export default NumberInputWithCustomArrows;
+export default NumberInputWithVariableWidth;
