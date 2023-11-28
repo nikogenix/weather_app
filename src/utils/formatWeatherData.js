@@ -18,3 +18,8 @@ export function formatWeatherData(value, unit, type) {
 		else return unit ? WEATHER_CODES[value].dayIcon : WEATHER_CODES[value].nightIcon;
 	}
 }
+
+export const convertBetweenCandF = (value, currentUnit) => {
+	if (currentUnit === "F") return ((value - 32) * 5) / 9;
+	else if (currentUnit === "C") return (value * 9) / 5 + 32;
+};
