@@ -90,10 +90,12 @@ const ResponsiveAppBar = () => {
 	const handleTemperatureUnitChange = async () => {
 		dispatch(toggleTemperatureUnit());
 
-		const { data, aqi } = await getWeather(date, location, temperatureUnit === "C" ? "F" : "C");
-		console.log(data);
-		console.log(location);
-		dispatch(setWeather({ ...data, location, aqi }));
+		if (location) {
+			const { data, aqi } = await getWeather(date, location, temperatureUnit === "C" ? "F" : "C");
+			console.log(data);
+			console.log(location);
+			dispatch(setWeather({ ...data, location, aqi }));
+		}
 	};
 
 	const isSmallScreen = useMediaQuery("only screen and (max-width : 599px)");
