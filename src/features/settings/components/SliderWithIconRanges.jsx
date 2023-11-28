@@ -1,8 +1,12 @@
+import { useSelector } from "react-redux";
+
 import { styled } from "@mui/material/styles";
 
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { Typography } from "@mui/material";
+
+import { convertBetweenCandF } from "../../../utils/formatWeatherData";
 
 const StyledSlider = styled(Slider)(({ theme }) => ({
 	color: "currentColor",
@@ -63,12 +67,16 @@ function formatAriaLabel(value) {
 }
 
 const SliderWithIconRanges = ({ value, handleChange, icons, formatValue }) => {
+	const minC = -25;
+	const maxC = 40;
+	const temperatureUnit = useSelector((state) => state.settings.temperatureUnit);
+
 	return (
 		<Box sx={{ width: "100%" }}>
 			<StyledSlider
 				value={value}
-				min={-25}
-				max={40}
+				min={temperatureUnit === "C" ? minC : convertBetweenCandF(minC, "C")}
+				max={temperatureUnit === "C" ? maxC : convertBetweenCandF(maxC, "C")}
 				step={1}
 				onChange={handleChange}
 				track={false}
