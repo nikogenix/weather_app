@@ -90,7 +90,7 @@ const WeatherTimelineHourly = ({ chartData, hourSelection, handleHourChange, day
 								textTransform: "none",
 								fontSize: 12,
 								mb: 1,
-								height: "3em",
+								height: "100%",
 								display: "flex",
 								alignItems: "center",
 							}}

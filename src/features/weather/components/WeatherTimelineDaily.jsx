@@ -106,7 +106,7 @@ const WeatherTimelineDaily = ({ data, daySelection, handleDayChange }) => {
 								textTransform: "none",
 								fontSize: 12,
 								mb: 1,
-								height: "3em",
+								height: "100%",
 								display: "flex",
 								alignItems: "center",
 							}}
