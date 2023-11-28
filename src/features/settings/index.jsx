@@ -50,11 +50,6 @@ const Settings = ({ open, handleClose }) => {
 		});
 	};
 
-	const [lowerClothingValues, setLowerClothingValues] = useState([-10, 0, 10, 20]);
-
-	const [bootsValues, setBootsValues] = useState([0, 10, 20]);
-
-	//const [upperClothingValues, setUpperClothingValues] = useState([-10, 0, 10, 20]);
 	const upperClothingIcons = [
 		<WeatherRecommendationIcon key="PulloverX3" iconName="PulloverX3" size={45} />,
 		<WeatherRecommendationIcon key="PulloverX2" iconName="PulloverX2" size={45} />,
@@ -63,7 +58,6 @@ const Settings = ({ open, handleClose }) => {
 		<WeatherRecommendationIcon key="Shirt" iconName="Shirt" size={45} />,
 	];
 
-	//const [upperClothingLayerValues, setUpperClothingLayerValues] = useState([-10, 0, 10, 20]);
 	const upperClothingLayerIcons = [
 		<WeatherRecommendationIcon key="WinterJacket" iconName="WinterJacket" size={45} />,
 		<WeatherRecommendationIcon key="Coat" iconName="Coat" size={45} />,
@@ -72,10 +66,6 @@ const Settings = ({ open, handleClose }) => {
 		<WeatherRecommendationIcon key="SunCover" iconName="SunCover" size={45} />,
 	];
 
-	//const [lowerClothingValues, setLowerClothingValues] = useState([-10, 0, 10, 20]);
-	const handleLowerClothingChange = (event, newValue) => {
-		setLowerClothingValues(newValue);
-	};
 	const lowerClothingIcons = [
 		<WeatherRecommendationIcon key="WinterTrousers" iconName="WinterTrousers" size={45} />,
 		<WeatherRecommendationIcon key="JeansX2" iconName="JeansX2" size={45} />,
@@ -84,10 +74,6 @@ const Settings = ({ open, handleClose }) => {
 		<WeatherRecommendationIcon key="Shorts" iconName="Shorts" size={45} />,
 	];
 
-	//const [bootsValues, setBootsValues] = useState([0, 10, 20]);
-	const handleBootsChange = (event, newValue) => {
-		setBootsValues(newValue);
-	};
 	const bootsIcons = [
 		<WeatherRecommendationIcon key="WinterBoots" iconName="WinterBoots" size={45} />,
 		<WeatherRecommendationIcon key="Boots" iconName="Boots" size={45} />,
@@ -160,8 +146,8 @@ const Settings = ({ open, handleClose }) => {
 					<SettingsTitleWithBorder title="lower clothing" border={2}>
 						<SettingsTitleWithBorder title="temperature ranges" border={1}>
 							<SliderWithIconRanges
-								value={lowerClothingValues}
-								handleChange={handleLowerClothingChange}
+								value={newPreferences.lowerClothing.values}
+								handleChange={(e) => handlePreferenceChange("lowerClothing.values", e.target.value)}
 								icons={lowerClothingIcons}
 								formatValue={(value) => formatWeatherData(value, "", "degree")}
 							/>
@@ -189,8 +175,8 @@ const Settings = ({ open, handleClose }) => {
 					<SettingsTitleWithBorder title="shoes" border={2}>
 						<SettingsTitleWithBorder title="temperature ranges" border={1}>
 							<SliderWithIconRanges
-								value={bootsValues}
-								handleChange={handleBootsChange}
+								value={newPreferences.boots.values}
+								handleChange={(e) => handlePreferenceChange("boots.values", e.target.value)}
 								icons={bootsIcons}
 								formatValue={(value) => formatWeatherData(value, "", "degree")}
 							/>
