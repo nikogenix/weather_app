@@ -20,7 +20,7 @@ const SettingsTitleWithBorder = ({ title, border, children, icon }) => {
 					{title}
 				</Typography>
 			</Box>
-			<Box sx={{ borderLeft: `3px ${theme.palette.divider} solid`, px: 2, py: 1, mb: 1.5 }}>{children}</Box>
+			<Box sx={{ borderLeft: `3px ${theme.palette.divider} solid`, pl: 1.2, py: 1, mb: 1.5 }}>{children}</Box>
 		</>
 	);
 };
