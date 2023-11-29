@@ -119,7 +119,7 @@
             -   [x] unit preference
             -   [x] slider based options for clothing/accessory
             -   [ ] customise the c/a items
-            -   [ ] reset settings
+            -   [x] reset settings
         -   [ ] persist settings data
             -   [ ] guest mode (local storage)
             -   [ ] user settings (DB)
@@ -156,9 +156,10 @@
         -   [x] displaying "n/a" when no data is available
     -   [ ] testing
     -   [ ] performance
--   [ ] bugs
+-   [ ] bugs & possible improvements
     -   [ ] "Maximum update depth exceeded" warning [1] in the clock from the date picker, when holding down the mouse and dragging for an extended amount of time and [2] in the weather graphs, when hovering
     -   [ ] continuously pressing up/down arrow keys while focused on a numerical input from the settings will freeze the app momentarily and update the values with a delay; only affects the keyboard, while on-screen arrows from the input work normally
+    -   [ ] rounding up the temperature settings upon unit conversion will lead to imprecision upon converting the values repeatedly back and forth; can be resolved by only rounding up the values visually, but that might lead to other complications
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
