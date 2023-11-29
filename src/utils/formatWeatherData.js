@@ -20,6 +20,6 @@ export function formatWeatherData(value, unit, type) {
 }
 
 export const convertBetweenCandF = (value, currentUnit) => {
-	if (currentUnit === "F") return ((value - 32) * 5) / 9;
-	else if (currentUnit === "C") return (value * 9) / 5 + 32;
+	if (currentUnit === "F") return Math.round(((value - 32) * 5) / 9);
+	else if (currentUnit === "C") return Math.round((value * 9) / 5 + 32);
 };
