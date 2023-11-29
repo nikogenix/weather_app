@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-import { Box, Button, Modal } from "@mui/material";
+import {
+	Box,
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	Modal,
+} from "@mui/material";
 
 import SaveSharpIcon from "@mui/icons-material/SaveSharp";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
@@ -37,6 +46,21 @@ const Settings = ({ open, handleClose }) => {
 		setNewPreferences((previousPreferences) => {
 			return updateObjProp(previousPreferences, value, name);
 		});
+	};
+
+	const [openCloseConfirmation, setOpenCloseConfirmation] = useState(false);
+
+	const handleClickOpenCloseConfirmation = () => {
+		setOpenCloseConfirmation(true);
+	};
+
+	const handleCloseCloseConfirmation = () => {
+		setOpenCloseConfirmation(false);
+	};
+
+	const confirmAndClose = () => {
+		handleCloseCloseConfirmation();
+		handleClose();
 	};
 
 	const upperClothingIcons = [
@@ -152,11 +176,42 @@ const Settings = ({ open, handleClose }) => {
 							},
 						}}
 						endIcon={<CloseSharpIcon />}
-						onClick={handleClose}
+						onClick={handleClickOpenCloseConfirmation}
 					>
 						cancel
 					</Button>
 				</Box>
+				<Dialog
+					open={openCloseConfirmation}
+					onClose={handleCloseCloseConfirmation}
+					aria-labelledby="alert-dialog-unsaved-changes"
+					aria-describedby="alert-dialog-confirm-exit"
+				>
+					<DialogTitle fontSize={16}>{"unsaved changes"}</DialogTitle>
+					<DialogContent>
+						<DialogContentText fontSize={14}>
+							closing the settings menu will revert your unsaved changes
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button
+							variant="contained"
+							sx={{ textTransform: "none", borderRadius: 0 }}
+							onClick={confirmAndClose}
+						>
+							continue
+						</Button>
+						<Button
+							variant="outlined"
+							sx={{ textTransform: "none", borderRadius: 0 }}
+							onClick={handleCloseCloseConfirmation}
+							autoFocus
+						>
+							cancel
+						</Button>
+					</DialogActions>
+				</Dialog>
+
 				<Box sx={{ overflow: "scroll", maxHeight: "87vh" }}>
 					<SettingsTitleWithBorder title="settings" border={3}>
 						<SettingsTitleWithBorder title="upper clothing" border={2}>
