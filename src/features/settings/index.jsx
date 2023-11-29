@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { isEqual } from "lodash";
 
 import {
 	Box,
@@ -15,6 +16,7 @@ import {
 import SaveSharpIcon from "@mui/icons-material/SaveSharp";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
 import RestartAltSharpIcon from "@mui/icons-material/RestartAltSharp";
+import CheckBoxSharpIcon from "@mui/icons-material/CheckBoxSharp";
 
 import { formatWeatherData } from "../../utils/formatWeatherData";
 
@@ -24,10 +26,12 @@ import SliderWithIconRanges from "./components/SliderWithIconRanges";
 import CheckboxWithCustomLabel from "./components/CheckboxWithCustomLabel";
 import NumberInputWithVariableWidth from "./components/NumberInputWithVariableWidth";
 
+import { resetPreferences, updatePreferences } from "../../store/settingsSlice";
+
 const Settings = ({ open, handleClose }) => {
+	const dispatch = useDispatch();
 	const preferences = useSelector((state) => state.settings.preferences);
 	const [newPreferences, setNewPreferences] = useState(preferences);
-
 	useEffect(() => {
 		setNewPreferences(preferences);
 	}, [preferences]);
@@ -49,18 +53,46 @@ const Settings = ({ open, handleClose }) => {
 	};
 
 	const [openCloseConfirmation, setOpenCloseConfirmation] = useState(false);
-
 	const handleClickOpenCloseConfirmation = () => {
 		setOpenCloseConfirmation(true);
 	};
-
 	const handleCloseCloseConfirmation = () => {
 		setOpenCloseConfirmation(false);
 	};
-
 	const confirmAndClose = () => {
 		handleCloseCloseConfirmation();
 		handleClose();
+	};
+	const confirmationDialogueIfUnsaved = () => {
+		if (isEqual(preferences, newPreferences)) handleClose();
+		else handleClickOpenCloseConfirmation();
+	};
+
+	const [openResetConfirmation, setOpenResetConfirmation] = useState(false);
+	const handleClickOpenResetConfirmation = () => {
+		setOpenResetConfirmation(true);
+	};
+	const handleCloseResetConfirmation = () => {
+		setOpenResetConfirmation(false);
+	};
+	const confirmAndReset = () => {
+		dispatch(resetPreferences());
+		handleCloseResetConfirmation();
+	};
+
+	const [saveCheckmark, setSaveCheckmark] = useState(false);
+	const handlePreferenceSave = () => {
+		dispatch(updatePreferences(newPreferences));
+		let success = true;
+		if (success) {
+			setSaveCheckmark(true);
+			setTimeout(() => setSaveCheckmark(false), 2000);
+		}
+		/*	TODO
+			- save in local storage
+			- save in DB
+			- error if either went wrong
+		*/
 	};
 
 	const upperClothingIcons = [
@@ -97,7 +129,12 @@ const Settings = ({ open, handleClose }) => {
 	if (!newPreferences) return null;
 
 	return (
-		<Modal open={open} onClose={handleClose} aria-labelledby="settings panel" aria-describedby="settings panel ">
+		<Modal
+			open={open}
+			onClose={confirmationDialogueIfUnsaved}
+			aria-labelledby="settings panel"
+			aria-describedby="settings panel"
+		>
 			<Box
 				sx={{
 					position: "absolute",
@@ -133,7 +170,8 @@ const Settings = ({ open, handleClose }) => {
 						color="primary"
 						variant="contained"
 						sx={{ borderRadius: 0, textTransform: "none" }}
-						startIcon={<SaveSharpIcon />}
+						startIcon={saveCheckmark ? <CheckBoxSharpIcon /> : <SaveSharpIcon />}
+						onClick={handlePreferenceSave}
 					>
 						save
 					</Button>
@@ -155,6 +193,7 @@ const Settings = ({ open, handleClose }) => {
 							},
 						}}
 						endIcon={<RestartAltSharpIcon />}
+						onClick={handleClickOpenResetConfirmation}
 					>
 						reset
 					</Button>
@@ -176,11 +215,12 @@ const Settings = ({ open, handleClose }) => {
 							},
 						}}
 						endIcon={<CloseSharpIcon />}
-						onClick={handleClickOpenCloseConfirmation}
+						onClick={confirmationDialogueIfUnsaved}
 					>
 						cancel
 					</Button>
 				</Box>
+
 				<Dialog
 					open={openCloseConfirmation}
 					onClose={handleCloseCloseConfirmation}
@@ -190,7 +230,7 @@ const Settings = ({ open, handleClose }) => {
 					<DialogTitle fontSize={16}>{"unsaved changes"}</DialogTitle>
 					<DialogContent>
 						<DialogContentText fontSize={14}>
-							closing the settings menu will revert your unsaved changes
+							closing the settings menu will revert your unsaved changes.
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
@@ -205,6 +245,40 @@ const Settings = ({ open, handleClose }) => {
 							variant="outlined"
 							sx={{ textTransform: "none", borderRadius: 0 }}
 							onClick={handleCloseCloseConfirmation}
+							autoFocus
+						>
+							cancel
+						</Button>
+					</DialogActions>
+				</Dialog>
+				<Dialog
+					open={openResetConfirmation}
+					onClose={handleCloseResetConfirmation}
+					aria-labelledby="alert-dialog-reset"
+					aria-describedby="alert-dialog-confirm-reset"
+				>
+					<DialogTitle fontSize={16}>{"reset to default"}</DialogTitle>
+					<DialogContent>
+						<DialogContentText fontSize={14}>
+							resetting will affect your local settings, as well as the user settings if you&apos;re
+							logged in.
+						</DialogContentText>
+						<DialogContentText fontSize={14} sx={{ mt: 1 }}>
+							you can cancel instead if you only wish to revert the unsaved changes.
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button
+							variant="contained"
+							sx={{ textTransform: "none", borderRadius: 0 }}
+							onClick={confirmAndReset}
+						>
+							continue
+						</Button>
+						<Button
+							variant="outlined"
+							sx={{ textTransform: "none", borderRadius: 0 }}
+							onClick={handleCloseResetConfirmation}
 							autoFocus
 						>
 							cancel
