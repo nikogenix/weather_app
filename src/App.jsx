@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import "./App.css";
@@ -6,7 +6,7 @@ import "./assets/css/weather-icons.min.css";
 import "./assets/css/weather-icons-wind.min.css";
 
 import { useDispatch, useSelector } from "react-redux";
-import { toggleDarkMode } from "./store/settingsSlice";
+import { updateAllSettings, toggleDarkMode } from "./store/settingsSlice";
 import { getDesignTokens } from "./data/theme";
 
 import { Container, CssBaseline } from "@mui/material";
@@ -21,13 +21,19 @@ import SlidingFooter from "./layouts/SlidingFooter";
 function App() {
 	const dispatch = useDispatch();
 
-	// const [user, setUser] = useState("");
-
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 	const darkMode = useSelector((state) => state.settings.darkMode);
 	!prefersDarkMode && darkMode && dispatch(toggleDarkMode());
 
 	const theme = useMemo(() => createTheme(getDesignTokens(darkMode ? "dark" : "light")), [darkMode]);
+
+	useEffect(() => {
+		const localSettings = localStorage.getItem("nikogenix-weather-app-settings");
+		if (localSettings) {
+			const parsedSettings = JSON.parse(localSettings);
+			dispatch(updateAllSettings(parsedSettings));
+		}
+	}, [dispatch]);
 
 	return (
 		<ThemeProvider theme={theme}>

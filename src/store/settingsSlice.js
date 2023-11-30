@@ -59,9 +59,15 @@ const settingsSlice = createSlice({
 		resetPreferences: (state) => {
 			state.preferences = state.temperatureUnit === "C" ? { ...defaultPreferencesC } : { ...defaultPreferencesF };
 		},
+		updateAllSettings: (state, action) => {
+			state.preferences = action.payload.preferences;
+			state.darkMode = action.payload.darkMode;
+			state.temperatureUnit = action.payload.temperatureUnit;
+		},
 	},
 });
 
-export const { toggleDarkMode, toggleTemperatureUnit, updatePreferences, resetPreferences } = settingsSlice.actions;
+export const { toggleDarkMode, toggleTemperatureUnit, updatePreferences, resetPreferences, updateAllSettings } =
+	settingsSlice.actions;
 
 export default settingsSlice.reducer;
