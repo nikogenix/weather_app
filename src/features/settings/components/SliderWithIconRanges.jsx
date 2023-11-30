@@ -12,6 +12,12 @@ const StyledSlider = styled(Slider)(({ theme }) => ({
 	color: "currentColor",
 	height: 40,
 	padding: "13px 0",
+	width: "80%",
+	[theme.breakpoints.up("sm")]: {
+		width: "90%",
+	},
+	display: "block",
+	margin: "auto",
 	"& .MuiSlider-thumb": {
 		height: 0,
 		width: 0,
@@ -35,6 +41,7 @@ const StyledSlider = styled(Slider)(({ theme }) => ({
 	},
 	"& .MuiSlider-track": {
 		height: 3,
+		margin: 20,
 	},
 	"& .MuiSlider-rail": {
 		color: theme.palette.mode === "dark" ? "#bfbfbf" : "#d8d8d8",
