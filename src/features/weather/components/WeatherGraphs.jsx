@@ -102,7 +102,7 @@ const WeatherGraphs = ({ chartData, data }) => {
 									tickMinStep: 3600 * 1000 * 4,
 									valueFormatter: dateValueFormatter,
 									min: Number(chartData.hours[0]),
-									max: Number(chartData.hours[24]),
+									max: Number(chartData.hours[c[0].data.length - 1]),
 								},
 							]}
 							yAxis={[
