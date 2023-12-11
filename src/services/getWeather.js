@@ -37,7 +37,7 @@ const getWeather = async (date, location, temperatureUnit) => {
 		console.log(date);
 		const startDate = new Date(date);
 		const endDate = new Date();
-		endDate.setDate(endDate.getDate() + 16);
+		endDate.setDate(endDate.getDate() + 15);
 		const endDateAqi = new Date();
 		endDateAqi.setDate(endDateAqi.getDate() + 5);
 
