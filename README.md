@@ -160,7 +160,8 @@
     -   [ ] "Maximum update depth exceeded" warning [1] in the clock from the date picker, when holding down the mouse and dragging for an extended amount of time and [2] in the weather graphs, when hovering
     -   [ ] continuously pressing up/down arrow keys while focused on a numerical input from the settings will freeze the app momentarily and update the values with a delay; only affects the keyboard, while on-screen arrows from the input work normally
     -   [ ] rounding up the temperature settings upon unit conversion will lead to imprecision upon converting the values repeatedly back and forth; can be resolved by only rounding up the values visually, but that might lead to other complications
-    -   [ ] Error: `<path>` attribute d: Expected number, "MNaN,150CNaN,149.…" ocurrs when clicking the last element in the daily weather timeline
+    -   [x] Error: `<path>` attribute d: Expected number, "MNaN,150CNaN,149.…" ocurrs when clicking the last element in the daily weather timeline
+        -   [ fixed ] was actually related to the charts, not the timeline, due to the end time being 1 hour earlier on the last day
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
