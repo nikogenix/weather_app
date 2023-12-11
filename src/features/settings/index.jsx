@@ -286,7 +286,7 @@ const Settings = ({ open, handleClose }) => {
 					</DialogActions>
 				</Dialog>
 
-				<Box sx={{ overflow: "scroll", maxHeight: "87vh" }}>
+				<Box sx={{ overflowY: "scroll", maxHeight: "87vh" }}>
 					<SettingsTitleWithBorder title="settings" border={3}>
 						<SettingsTitleWithBorder title="upper clothing" border={2}>
 							<SettingsTitleWithBorder title="temperature ranges" border={1}>
