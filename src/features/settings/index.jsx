@@ -27,6 +27,7 @@ import CheckboxWithCustomLabel from "./components/CheckboxWithCustomLabel";
 import NumberInputWithVariableWidth from "./components/NumberInputWithVariableWidth";
 
 import { resetPreferences, updatePreferences } from "../../store/settingsSlice";
+import getWeatherIconSet from "../../utils/getWeatherIconSet";
 
 const Settings = ({ open, handleClose }) => {
 	const dispatch = useDispatch();
@@ -95,36 +96,11 @@ const Settings = ({ open, handleClose }) => {
 		*/
 	};
 
-	const upperClothingIcons = [
-		<WeatherRecommendationIcon key="PulloverX3" iconName="PulloverX3" size={45} />,
-		<WeatherRecommendationIcon key="PulloverX2" iconName="PulloverX2" size={45} />,
-		<WeatherRecommendationIcon key="Pullover" iconName="Pullover" size={45} />,
-		<WeatherRecommendationIcon key="LongSleeve" iconName="LongSleeve" size={45} />,
-		<WeatherRecommendationIcon key="Shirt" iconName="Shirt" size={45} />,
-	];
-
-	const upperClothingLayerIcons = [
-		<WeatherRecommendationIcon key="WinterJacket" iconName="WinterJacket" size={45} />,
-		<WeatherRecommendationIcon key="Coat" iconName="Coat" size={45} />,
-		<WeatherRecommendationIcon key="FallCoat" iconName="FallCoat" size={45} />,
-		<WeatherRecommendationIcon key="Hoodie" iconName="Hoodie" size={45} />,
-		<WeatherRecommendationIcon key="SunCover" iconName="SunCover" size={45} />,
-	];
-
-	const lowerClothingIcons = [
-		<WeatherRecommendationIcon key="WinterTrousers" iconName="WinterTrousers" size={45} />,
-		<WeatherRecommendationIcon key="JeansX2" iconName="JeansX2" size={45} />,
-		<WeatherRecommendationIcon key="Jeans" iconName="Jeans" size={45} />,
-		<WeatherRecommendationIcon key="LoosePants" iconName="LoosePants" size={45} />,
-		<WeatherRecommendationIcon key="Shorts" iconName="Shorts" size={45} />,
-	];
-
-	const bootsIcons = [
-		<WeatherRecommendationIcon key="WinterBoots" iconName="WinterBoots" size={45} />,
-		<WeatherRecommendationIcon key="Boots" iconName="Boots" size={45} />,
-		<WeatherRecommendationIcon key="Snickers" iconName="Snickers" size={45} />,
-		<WeatherRecommendationIcon key="Sandals" iconName="Sandals" size={45} />,
-	];
+	const iconSize = 45;
+	const upperClothingIcons = getWeatherIconSet("upperClothing", iconSize);
+	const upperClothingLayerIcons = getWeatherIconSet("upperClothingLayer", iconSize);
+	const lowerClothingIcons = getWeatherIconSet("lowerClothing", iconSize);
+	const bootsIcons = getWeatherIconSet("boots", iconSize);
 
 	if (!newPreferences) return null;
 
@@ -328,7 +304,7 @@ const Settings = ({ open, handleClose }) => {
 										)
 									}
 								>
-									even if the UV index is below{" "}
+									unless the UV index is{" "}
 									<NumberInputWithVariableWidth
 										value={newPreferences.upperClothingLayer.coverIfSunAndUvThreshold.value}
 										onChange={(e) =>
@@ -338,8 +314,8 @@ const Settings = ({ open, handleClose }) => {
 											)
 										}
 										disabled={!newPreferences.upperClothingLayer.coverIfSunAndUvThreshold.enabled}
-									/>
-									, suggest at least a sun cover during day time
+									/>{" "}
+									or higher, a sun cover will not be recommended
 								</CheckboxWithCustomLabel>
 							</SettingsTitleWithBorder>
 						</SettingsTitleWithBorder>
