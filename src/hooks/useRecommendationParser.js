@@ -44,15 +44,48 @@ export default function useRecommendationParser(data, startDate = "2023-12-28T00
 		snowDepth
 	);
 	const lowerClothing = parseLowerClothing(
-		preferences.upperClothingLayer,
+		preferences.lowerClothing,
 		temperature,
 		precipitation,
 		snowfall,
 		snowDepth
 	);
+	const boots = parseBoots(preferences.boots, temperature, precipitation, snowfall, snowDepth);
 
-	return { clothing: { upperClothing, upperClothingLayer, lowerClothing } };
+	return { clothing: { upperClothing, upperClothingLayer, lowerClothing, boots } };
 }
+
+const parseBoots = (settings, temperature, precipitation, snowfall, snowDepth) => {
+	const result = {
+		incompleteData: false,
+	};
+
+	for (let stat of ["min", "max", "avg"]) {
+		result.incompleteData =
+			result.incompleteData ||
+			temperature?.incompleteData ||
+			precipitation?.incompleteData ||
+			snowfall?.incompleteData ||
+			snowDepth?.incompleteData ||
+			[temperature, precipitation, snowfall, snowDepth].includes(null);
+
+		if ((snowfall || snowDepth) && settings.bootsIfSnow && (snowfall[stat] || snowDepth[stat])) {
+			result[stat] = bootsIcons[0]; // winter boots
+			break;
+		}
+		if (temperature) {
+			result[stat] = bootsIcons[parseTempRanges(settings.values, temperature[stat])];
+		}
+		if (precipitation && settings.rainNoSandals && precipitation[stat]) {
+			if (result[stat] === bootsIcons[3]) {
+				result[stat] = bootsIcons[2];
+			}
+		}
+	}
+
+	if (temperature === null) return unknownIcon;
+	return result;
+};
 
 const parseLowerClothing = (settings, temperature, precipitation, snowfall, snowDepth) => {
 	const result = {
