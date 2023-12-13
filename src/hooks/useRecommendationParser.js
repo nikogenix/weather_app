@@ -16,9 +16,11 @@ const upperClothingIcons = getWeatherIconSet("upperClothing", iconSize);
 const upperClothingLayerIcons = getWeatherIconSet("upperClothingLayer", iconSize);
 const lowerClothingIcons = getWeatherIconSet("lowerClothing", iconSize);
 const bootsIcons = getWeatherIconSet("boots", iconSize);
+const accessoriesIcons = getWeatherIconSet("accessories", iconSize);
+const miscellaneousIcons = getWeatherIconSet("miscellaneous", iconSize);
 const unknownIcon = null;
 
-export default function useRecommendationParser(data, startDate = "2023-12-28T00:00", endDate = "2023-12-28T23:00") {
+export default function useRecommendationParser(data, startDate = "2023-12-21T00:00", endDate = "2023-12-23T23:00") {
 	const preferences = useSelector((state) => state.settings.preferences);
 
 	if (!data.hourly) return null;
@@ -51,9 +53,69 @@ export default function useRecommendationParser(data, startDate = "2023-12-28T00
 		snowDepth
 	);
 	const boots = parseBoots(preferences.boots, temperature, precipitation, snowfall, snowDepth);
+	const { accessories, miscellaneous } = {
+		...parseAccessoriesAndMisc(preferences, precipitation, uv, temperature, snowfall, snowDepth, aqi),
+	};
 
-	return { clothing: { upperClothing, upperClothingLayer, lowerClothing, boots } };
+	return { clothing: { upperClothing, upperClothingLayer, lowerClothing, boots }, accessories, miscellaneous };
 }
+
+const parseAccessoriesAndMisc = (settings, precipitation, uv, temperature, snowfall, snowDepth, aqi) => {
+	const result = {
+		accessories: {
+			umbrellaRainCoat: {
+				icon:
+					precipitation === null
+						? null
+						: precipitation.max > 0 && settings.accessories.umbrella.rain
+						? accessoriesIcons.umbrellaRainCoat
+						: null,
+				incompleteData: precipitation === null || precipitation.incompleteData,
+			},
+			sunglasses: {
+				icon:
+					uv === null
+						? null
+						: uv.max >= settings.accessories.sunglasses.ifUvThreshold.value &&
+						  settings.accessories.sunglasses.ifUvThreshold.enabled
+						? accessoriesIcons.sunglasses
+						: null,
+				incompleteData: uv === null || uv.incompleteData,
+			},
+			sunHatUmbrella: {
+				icon:
+					uv === null
+						? null
+						: uv.max >= settings.accessories.sunHat.ifUvThreshold.value &&
+						  settings.accessories.sunHat.ifUvThreshold.enabled
+						? accessoriesIcons.sunHatUmbrella
+						: null,
+				incompleteData: uv === null || uv.incompleteData,
+			},
+			glovesCapComforter: {
+				icon:
+					temperature === null && snowfall === null && snowDepth === null
+						? null
+						: (snowDepth.max || snowfall.max) && settings.accessories.gloves.ifSnow
+						? accessoriesIcons.glovesCapComforter
+						: temperature.min <= settings.accessories.gloves.ifTempThreshold.value &&
+						  settings.accessories.gloves.ifTempThreshold.enabled
+						? accessoriesIcons.glovesCapComforter
+						: null,
+				incompleteData:
+					temperature === null ||
+					temperature.incompleteData ||
+					snowfall === null ||
+					snowfall.incompleteData ||
+					snowDepth === null ||
+					snowDepth.incompleteData,
+			},
+		},
+		miscellaneous: {},
+	};
+
+	return result;
+};
 
 const parseBoots = (settings, temperature, precipitation, snowfall, snowDepth) => {
 	const result = {
