@@ -16,6 +16,7 @@ const upperClothingIcons = getWeatherIconSet("upperClothing", iconSize);
 const upperClothingLayerIcons = getWeatherIconSet("upperClothingLayer", iconSize);
 const lowerClothingIcons = getWeatherIconSet("lowerClothing", iconSize);
 const bootsIcons = getWeatherIconSet("boots", iconSize);
+const unknownIcon = null;
 
 export default function useRecommendationParser(data, startDate = "2023-12-21T00:00", endDate = "2023-12-25T23:00") {
 	const preferences = useSelector((state) => state.settings.preferences);
@@ -33,17 +34,46 @@ export default function useRecommendationParser(data, startDate = "2023-12-21T00
 
 	console.log(preferences);
 
-	const upperClothing = parseUpperClothing(preferences.upperClothing.values, temperature);
+	const upperClothing = parseUpperClothing(preferences.upperClothing, temperature);
+	const upperClothingLayer = parseUpperClothingLayer(preferences.upperClothingLayer, temperature, uv, snowfall);
 
-	return { clothing: { upperClothing } };
+	return { clothing: { upperClothing, upperClothingLayer } };
 }
 
-const parseUpperClothing = (ranges, temperature) => {
+const parseUpperClothingLayer = (settings, temperature, uv, snowfall) => {
+	const result = {
+		incompleteData: false,
+	};
+
+	for (let stat of ["min", "max", "avg"]) {
+		result.incompleteData =
+			result.incompleteData || temperature?.incompleteData || uv?.incompleteData || snowfall?.incompleteData;
+
+		if (snowfall && settings.jacketIfSnow && snowfall[stat]) {
+			result[stat] = upperClothingLayerIcons[0]; // winter jacket
+			break;
+		}
+		if (temperature) {
+			result[stat] = upperClothingLayerIcons[parseTempRanges(settings.values, temperature[stat])];
+		}
+		if (uv && settings.coverIfSunAndUvThreshold.enabled && uv[stat]) {
+			if (uv[stat] < settings.coverIfSunAndUvThreshold.value && result[stat] === upperClothingLayerIcons[4]) {
+				result[stat] = unknownIcon;
+			}
+		}
+	}
+
 	if (temperature === null) return "no data";
+	return result;
+};
+
+const parseUpperClothing = (settings, temperature) => {
+	if (temperature === null) return "no data";
+	const preferredTempRanges = settings.values;
 	return {
-		min: upperClothingIcons[parseTempRanges(ranges, temperature.min)],
-		max: upperClothingIcons[parseTempRanges(ranges, temperature.max)],
-		avg: upperClothingIcons[parseTempRanges(ranges, temperature.avg)],
+		min: upperClothingIcons[parseTempRanges(preferredTempRanges, temperature.min)],
+		max: upperClothingIcons[parseTempRanges(preferredTempRanges, temperature.max)],
+		avg: upperClothingIcons[parseTempRanges(preferredTempRanges, temperature.avg)],
 		incompleteData: temperature.incompleteData,
 	};
 };
