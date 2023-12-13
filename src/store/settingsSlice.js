@@ -33,7 +33,7 @@ const settingsSlice = createSlice({
 				convertBetweenCandF(temp, currentUnit)
 			);
 			state.preferences.accessories.gloves.ifTempThreshold.value = convertBetweenCandF(
-				state.preferences.miscellaneous.water.ifTempThreshold.value,
+				state.preferences.accessories.gloves.ifTempThreshold.value,
 				currentUnit
 			);
 			state.preferences.miscellaneous.water.ifTempThreshold.value = convertBetweenCandF(
