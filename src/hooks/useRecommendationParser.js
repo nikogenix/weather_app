@@ -18,7 +18,7 @@ const lowerClothingIcons = getWeatherIconSet("lowerClothing", iconSize);
 const bootsIcons = getWeatherIconSet("boots", iconSize);
 const unknownIcon = null;
 
-export default function useRecommendationParser(data, startDate = "2023-12-21T00:00", endDate = "2023-12-25T23:00") {
+export default function useRecommendationParser(data, startDate = "2023-12-28T00:00", endDate = "2023-12-28T23:00") {
 	const preferences = useSelector((state) => state.settings.preferences);
 
 	if (!data.hourly) return null;
@@ -31,25 +31,76 @@ export default function useRecommendationParser(data, startDate = "2023-12-21T00
 	const uv = findMinMaxAvg(data.hourly.uv_index.slice(start, end + 1));
 	const aqi = findMinMaxAvg(data.aqi.hourly.european_aqi.slice(start, end + 1));
 	const snowfall = findMinMaxAvg(data.hourly.snowfall.slice(start, end + 1));
+	const snowDepth = findMinMaxAvg(data.hourly.snow_depth.slice(start, end + 1));
 
 	console.log(preferences);
 
 	const upperClothing = parseUpperClothing(preferences.upperClothing, temperature);
-	const upperClothingLayer = parseUpperClothingLayer(preferences.upperClothingLayer, temperature, uv, snowfall);
+	const upperClothingLayer = parseUpperClothingLayer(
+		preferences.upperClothingLayer,
+		temperature,
+		uv,
+		snowfall,
+		snowDepth
+	);
+	const lowerClothing = parseLowerClothing(
+		preferences.upperClothingLayer,
+		temperature,
+		precipitation,
+		snowfall,
+		snowDepth
+	);
 
-	return { clothing: { upperClothing, upperClothingLayer } };
+	return { clothing: { upperClothing, upperClothingLayer, lowerClothing } };
 }
 
-const parseUpperClothingLayer = (settings, temperature, uv, snowfall) => {
+const parseLowerClothing = (settings, temperature, precipitation, snowfall, snowDepth) => {
 	const result = {
 		incompleteData: false,
 	};
 
 	for (let stat of ["min", "max", "avg"]) {
 		result.incompleteData =
-			result.incompleteData || temperature?.incompleteData || uv?.incompleteData || snowfall?.incompleteData;
+			result.incompleteData ||
+			temperature?.incompleteData ||
+			precipitation?.incompleteData ||
+			snowfall?.incompleteData ||
+			snowDepth?.incompleteData ||
+			[temperature, precipitation, snowfall, snowDepth].includes(null);
 
-		if (snowfall && settings.jacketIfSnow && snowfall[stat]) {
+		if ((snowfall || snowDepth) && settings.trousersIfSnow && (snowfall[stat] || snowDepth[stat])) {
+			result[stat] = lowerClothingIcons[0]; // winter trousers
+			break;
+		}
+		if (temperature) {
+			result[stat] = lowerClothingIcons[parseTempRanges(settings.values, temperature[stat])];
+		}
+		if (precipitation && settings.rainNoShorts && precipitation[stat]) {
+			if (result[stat] === lowerClothingIcons[4]) {
+				result[stat] = lowerClothingIcons[3];
+			}
+		}
+	}
+
+	if (temperature === null) return unknownIcon;
+	return result;
+};
+
+const parseUpperClothingLayer = (settings, temperature, uv, snowfall, snowDepth) => {
+	const result = {
+		incompleteData: false,
+	};
+
+	for (let stat of ["min", "max", "avg"]) {
+		result.incompleteData =
+			result.incompleteData ||
+			temperature?.incompleteData ||
+			uv?.incompleteData ||
+			snowfall?.incompleteData ||
+			snowDepth?.incompleteData ||
+			[temperature, uv, snowfall, snowDepth].includes(null);
+
+		if ((snowfall || snowDepth) && settings.jacketIfSnow && (snowfall[stat] || snowDepth[stat])) {
 			result[stat] = upperClothingLayerIcons[0]; // winter jacket
 			break;
 		}
@@ -63,12 +114,12 @@ const parseUpperClothingLayer = (settings, temperature, uv, snowfall) => {
 		}
 	}
 
-	if (temperature === null) return "no data";
+	if (temperature === null) return unknownIcon;
 	return result;
 };
 
 const parseUpperClothing = (settings, temperature) => {
-	if (temperature === null) return "no data";
+	if (temperature === null) return unknownIcon;
 	const preferredTempRanges = settings.values;
 	return {
 		min: upperClothingIcons[parseTempRanges(preferredTempRanges, temperature.min)],
