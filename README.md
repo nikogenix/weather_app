@@ -162,6 +162,7 @@
     -   [ ] rounding up the temperature settings upon unit conversion will lead to imprecision upon converting the values repeatedly back and forth; can be resolved by only rounding up the values visually, but that might lead to other complications
     -   [x] Error: `<path>` attribute d: Expected number, "MNaN,150CNaN,149.…" ocurrs when clicking the last element in the daily weather timeline
         -   [ fixed ] was actually related to the charts, not the timeline, due to the end time being 1 hour earlier on the last day
+    -   [ ] the tooltips for UV and AQI info sometimes highlight the wrong category, or highlight a category while no data is available
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
