@@ -57,7 +57,7 @@ const parseAccessoriesAndMisc = (settings, precipitation, uv, temperature, snowf
 		const disabled =
 			winSettings.openIfTempThreshold.enabled === false &&
 			winSettings.openIfAqiThreshold.enabled === false &&
-			winSettings.closeIfRainOrSnow;
+			winSettings.closeIfRainOrSnow === false;
 
 		if (disabled) return { disabled, incompleteData: null, icon: null };
 
