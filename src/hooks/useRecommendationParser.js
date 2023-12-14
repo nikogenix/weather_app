@@ -1,16 +1,6 @@
 import { useSelector } from "react-redux";
 import getWeatherIconSet from "../utils/getWeatherIconSet";
 
-const recommendations = {
-	clothing: {
-		min: { upperClothing: null, upperClothingLayer: null, lowerClothing: null, boots: null },
-		max: { upperClothing: null, upperClothingLayer: null, lowerClothing: null, boots: null },
-		avg: { upperClothing: null, upperClothingLayer: null, lowerClothing: null, boots: null },
-	},
-	accessories: { umbrellaRainCoat: null, sunglasses: null, sunHatUmbrella: null, glovesCapComforter: null },
-	miscellaneous: { sunscreen: null, mask: null, water: null, noElectronics: null, windows: null },
-};
-
 let iconSize = 45;
 const upperClothingIcons = getWeatherIconSet("upperClothing", iconSize);
 const upperClothingLayerIcons = getWeatherIconSet("upperClothingLayer", iconSize);
@@ -20,7 +10,7 @@ const accessoriesIcons = getWeatherIconSet("accessories", iconSize);
 const miscellaneousIcons = getWeatherIconSet("miscellaneous", iconSize);
 const unknownIcon = null;
 
-export default function useRecommendationParser(data, startDate = "2023-12-21T00:00", endDate = "2023-12-23T23:00") {
+export default function useRecommendationParser(data, startDate = "2023-12-15T00:00", endDate = "2023-12-16T23:00") {
 	const preferences = useSelector((state) => state.settings.preferences);
 
 	if (!data.hourly) return null;
@@ -61,6 +51,52 @@ export default function useRecommendationParser(data, startDate = "2023-12-21T00
 }
 
 const parseAccessoriesAndMisc = (settings, precipitation, uv, temperature, snowfall, snowDepth, aqi) => {
+	const determineWindowsResults = () => {
+		const winSettings = settings.miscellaneous.windows;
+
+		const disabled =
+			winSettings.openIfTempThreshold.enabled === false &&
+			winSettings.openIfAqiThreshold.enabled === false &&
+			winSettings.closeIfRainOrSnow;
+
+		if (disabled) return { disabled, incompleteData: null, icon: null };
+
+		const incompleteData =
+			temperature === null ||
+			temperature.incompleteData ||
+			aqi === null ||
+			aqi.incompleteData ||
+			precipitation === null ||
+			precipitation.incompleteData ||
+			snowDepth === null ||
+			snowDepth.incompleteData ||
+			snowfall === null ||
+			snowfall.incompleteData;
+
+		const tempThreshold = winSettings.openIfTempThreshold.enabled
+			? temperature.avg >= winSettings.openIfTempThreshold.minValue &&
+			  temperature.avg <= winSettings.openIfTempThreshold.maxValue
+			: null;
+		const aqiThreshold = winSettings.openIfAqiThreshold.enabled
+			? aqi.max <= winSettings.openIfAqiThreshold.value
+			: null;
+		const rainOrSnow = winSettings.closeIfRainOrSnow ? precipitation.min > 0 || snowfall > 0 : null;
+
+		const icon = rainOrSnow
+			? miscellaneousIcons.windows.closed
+			: tempThreshold === null && aqiThreshold === null
+			? miscellaneousIcons.windows.open
+			: tempThreshold === null && aqiThreshold
+			? miscellaneousIcons.windows.open
+			: aqiThreshold === null && tempThreshold
+			? miscellaneousIcons.windows.open
+			: tempThreshold === false || aqiThreshold === false
+			? miscellaneousIcons.windows.closed
+			: miscellaneousIcons.windows.open;
+
+		return { icon, disabled, incompleteData };
+	};
+
 	const result = {
 		accessories: {
 			umbrellaRainCoat: {
@@ -71,6 +107,7 @@ const parseAccessoriesAndMisc = (settings, precipitation, uv, temperature, snowf
 						? accessoriesIcons.umbrellaRainCoat
 						: null,
 				incompleteData: precipitation === null || precipitation.incompleteData,
+				disabled: settings.accessories.umbrella.rain === false,
 			},
 			sunglasses: {
 				icon:
@@ -81,6 +118,7 @@ const parseAccessoriesAndMisc = (settings, precipitation, uv, temperature, snowf
 						? accessoriesIcons.sunglasses
 						: null,
 				incompleteData: uv === null || uv.incompleteData,
+				disabled: settings.accessories.sunglasses.ifUvThreshold.enabled === false,
 			},
 			sunHatUmbrella: {
 				icon:
@@ -91,6 +129,7 @@ const parseAccessoriesAndMisc = (settings, precipitation, uv, temperature, snowf
 						? accessoriesIcons.sunHatUmbrella
 						: null,
 				incompleteData: uv === null || uv.incompleteData,
+				disabled: settings.accessories.sunHat.ifUvThreshold.enabled === false,
 			},
 			glovesCapComforter: {
 				icon:
@@ -109,9 +148,63 @@ const parseAccessoriesAndMisc = (settings, precipitation, uv, temperature, snowf
 					snowfall.incompleteData ||
 					snowDepth === null ||
 					snowDepth.incompleteData,
+				disabled:
+					settings.accessories.gloves.ifSnow === false &&
+					settings.accessories.gloves.ifTempThreshold.enabled === false,
 			},
 		},
-		miscellaneous: {},
+		miscellaneous: {
+			sunscreen: {
+				icon:
+					uv === null
+						? null
+						: uv.max >= settings.miscellaneous.spf.ifUvThreshold.value &&
+						  settings.miscellaneous.spf.ifUvThreshold.enabled
+						? miscellaneousIcons.sunscreen
+						: null,
+				incompleteData: uv === null || uv.incompleteData,
+				disabled: settings.miscellaneous.spf.ifUvThreshold.enabled === false,
+			},
+			mask: {
+				icon:
+					aqi === null
+						? null
+						: aqi.max >= settings.miscellaneous.mask.ifAqiThreshold.value &&
+						  settings.miscellaneous.mask.ifAqiThreshold.enabled
+						? miscellaneousIcons.mask
+						: null,
+				incompleteData: aqi === null || aqi.incompleteData,
+				disabled: settings.miscellaneous.mask.ifAqiThreshold.enabled === false,
+			},
+			water: {
+				icon: settings.miscellaneous.water.always
+					? miscellaneousIcons.water
+					: temperature === null
+					? null
+					: temperature.max >= settings.miscellaneous.water.ifTempThreshold.value &&
+					  settings.miscellaneous.water.ifTempThreshold.enabled
+					? miscellaneousIcons.water
+					: null,
+				incompleteData: settings.miscellaneous.water.always
+					? false
+					: temperature === null || temperature.incompleteData,
+				disabled:
+					settings.miscellaneous.water.ifTempThreshold.enabled === false &&
+					settings.miscellaneous.water.always === false,
+			},
+			noElectronics: {
+				icon:
+					temperature === null
+						? null
+						: temperature.max >= settings.miscellaneous.electronicsOverheat.ifTempThreshold.value &&
+						  settings.miscellaneous.electronicsOverheat.ifTempThreshold.enabled
+						? miscellaneousIcons.noElectronics
+						: null,
+				incompleteData: temperature === null || temperature.incompleteData,
+				disabled: settings.miscellaneous.electronicsOverheat.ifTempThreshold.enabled === false,
+			},
+			windows: determineWindowsResults(),
+		},
 	};
 
 	return result;
