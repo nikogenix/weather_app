@@ -1,19 +1,23 @@
 import { useSelector } from "react-redux";
 import getWeatherIconSet from "../utils/getWeatherIconSet";
 
-let iconSize = 45;
-const upperClothingIcons = getWeatherIconSet("upperClothing", iconSize);
-const upperClothingLayerIcons = getWeatherIconSet("upperClothingLayer", iconSize);
-const lowerClothingIcons = getWeatherIconSet("lowerClothing", iconSize);
-const bootsIcons = getWeatherIconSet("boots", iconSize);
-const accessoriesIcons = getWeatherIconSet("accessories", iconSize);
-const miscellaneousIcons = getWeatherIconSet("miscellaneous", iconSize);
-const unknownIcon = null;
-
-export default function useRecommendationParser(data, startDate = "2023-12-15T00:00", endDate = "2023-12-16T23:00") {
+export default function useRecommendationParser(
+	data,
+	startDate = "2023-12-15T00:00",
+	endDate = "2023-12-16T23:00",
+	iconSize = 45
+) {
 	const preferences = useSelector((state) => state.settings.preferences);
 
 	if (!data.hourly) return null;
+
+	const upperClothingIcons = getWeatherIconSet("upperClothing", iconSize);
+	const upperClothingLayerIcons = getWeatherIconSet("upperClothingLayer", iconSize);
+	const lowerClothingIcons = getWeatherIconSet("lowerClothing", iconSize);
+	const bootsIcons = getWeatherIconSet("boots", iconSize);
+	const accessoriesIcons = getWeatherIconSet("accessories", iconSize);
+	const miscellaneousIcons = getWeatherIconSet("miscellaneous", iconSize);
+	const unknownIcon = null;
 
 	const start = data.hourly.time.findIndex((c) => c === startDate);
 	const end = data.hourly.time.findLastIndex((c) => c === endDate);
@@ -25,32 +29,62 @@ export default function useRecommendationParser(data, startDate = "2023-12-15T00
 	const snowfall = findMinMaxAvg(data.hourly.snowfall.slice(start, end + 1));
 	const snowDepth = findMinMaxAvg(data.hourly.snow_depth.slice(start, end + 1));
 
-	console.log(preferences);
-
-	const upperClothing = parseUpperClothing(preferences.upperClothing, temperature);
+	const upperClothing = parseUpperClothing(preferences.upperClothing, temperature, upperClothingIcons, unknownIcon);
 	const upperClothingLayer = parseUpperClothingLayer(
 		preferences.upperClothingLayer,
 		temperature,
 		uv,
 		snowfall,
-		snowDepth
+		snowDepth,
+		upperClothingLayerIcons,
+		unknownIcon
 	);
 	const lowerClothing = parseLowerClothing(
 		preferences.lowerClothing,
 		temperature,
 		precipitation,
 		snowfall,
-		snowDepth
+		snowDepth,
+		lowerClothingIcons,
+		unknownIcon
 	);
-	const boots = parseBoots(preferences.boots, temperature, precipitation, snowfall, snowDepth);
+	const boots = parseBoots(
+		preferences.boots,
+		temperature,
+		precipitation,
+		snowfall,
+		snowDepth,
+		bootsIcons,
+		unknownIcon
+	);
 	const { accessories, miscellaneous } = {
-		...parseAccessoriesAndMisc(preferences, precipitation, uv, temperature, snowfall, snowDepth, aqi),
+		...parseAccessoriesAndMisc(
+			preferences,
+			precipitation,
+			uv,
+			temperature,
+			snowfall,
+			snowDepth,
+			aqi,
+			miscellaneousIcons,
+			accessoriesIcons
+		),
 	};
 
 	return { clothing: { upperClothing, upperClothingLayer, lowerClothing, boots }, accessories, miscellaneous };
 }
 
-const parseAccessoriesAndMisc = (settings, precipitation, uv, temperature, snowfall, snowDepth, aqi) => {
+const parseAccessoriesAndMisc = (
+	settings,
+	precipitation,
+	uv,
+	temperature,
+	snowfall,
+	snowDepth,
+	aqi,
+	miscellaneousIcons,
+	accessoriesIcons
+) => {
 	const determineWindowsResults = () => {
 		const winSettings = settings.miscellaneous.windows;
 
@@ -210,7 +244,7 @@ const parseAccessoriesAndMisc = (settings, precipitation, uv, temperature, snowf
 	return result;
 };
 
-const parseBoots = (settings, temperature, precipitation, snowfall, snowDepth) => {
+const parseBoots = (settings, temperature, precipitation, snowfall, snowDepth, bootsIcons, unknownIcon) => {
 	const result = {
 		incompleteData: false,
 	};
@@ -242,7 +276,15 @@ const parseBoots = (settings, temperature, precipitation, snowfall, snowDepth) =
 	return result;
 };
 
-const parseLowerClothing = (settings, temperature, precipitation, snowfall, snowDepth) => {
+const parseLowerClothing = (
+	settings,
+	temperature,
+	precipitation,
+	snowfall,
+	snowDepth,
+	lowerClothingIcons,
+	unknownIcon
+) => {
 	const result = {
 		incompleteData: false,
 	};
@@ -274,7 +316,15 @@ const parseLowerClothing = (settings, temperature, precipitation, snowfall, snow
 	return result;
 };
 
-const parseUpperClothingLayer = (settings, temperature, uv, snowfall, snowDepth) => {
+const parseUpperClothingLayer = (
+	settings,
+	temperature,
+	uv,
+	snowfall,
+	snowDepth,
+	upperClothingLayerIcons,
+	unknownIcon
+) => {
 	const result = {
 		incompleteData: false,
 	};
@@ -306,7 +356,7 @@ const parseUpperClothingLayer = (settings, temperature, uv, snowfall, snowDepth)
 	return result;
 };
 
-const parseUpperClothing = (settings, temperature) => {
+const parseUpperClothing = (settings, temperature, upperClothingIcons, unknownIcon) => {
 	if (temperature === null) return unknownIcon;
 	const preferredTempRanges = settings.values;
 	return {
