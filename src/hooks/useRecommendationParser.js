@@ -260,7 +260,7 @@ const parseBoots = (settings, temperature, precipitation, snowfall, snowDepth, b
 
 		if ((snowfall || snowDepth) && settings.bootsIfSnow && (snowfall[stat] || snowDepth[stat])) {
 			result[stat] = bootsIcons[0]; // winter boots
-			break;
+			continue;
 		}
 		if (temperature) {
 			result[stat] = bootsIcons[parseTempRanges(settings.values, temperature[stat])];
@@ -300,7 +300,7 @@ const parseLowerClothing = (
 
 		if ((snowfall || snowDepth) && settings.trousersIfSnow && (snowfall[stat] || snowDepth[stat])) {
 			result[stat] = lowerClothingIcons[0]; // winter trousers
-			break;
+			continue;
 		}
 		if (temperature) {
 			result[stat] = lowerClothingIcons[parseTempRanges(settings.values, temperature[stat])];
@@ -340,7 +340,7 @@ const parseUpperClothingLayer = (
 
 		if ((snowfall || snowDepth) && settings.jacketIfSnow && (snowfall[stat] || snowDepth[stat])) {
 			result[stat] = upperClothingLayerIcons[0]; // winter jacket
-			break;
+			continue;
 		}
 		if (temperature) {
 			result[stat] = upperClothingLayerIcons[parseTempRanges(settings.values, temperature[stat])];
