@@ -3,8 +3,8 @@ import getWeatherIconSet from "../utils/getWeatherIconSet";
 
 export default function useRecommendationParser(
 	data,
-	startDate = "2023-12-15T00:00",
-	endDate = "2023-12-16T23:00",
+	startDate = "2023-12-20T00:00",
+	endDate = "2023-12-20T23:00",
 	iconSize = 45
 ) {
 	const preferences = useSelector((state) => state.settings.preferences);
