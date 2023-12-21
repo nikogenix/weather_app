@@ -3,8 +3,8 @@ import getWeatherIconSet from "../utils/getWeatherIconSet";
 
 export default function useRecommendationParser(
 	data,
-	startDate = "2023-12-20T00:00",
-	endDate = "2023-12-20T23:00",
+	startDate = "2023-12-27T00:00",
+	endDate = "2023-12-27T23:00",
 	iconSize = 45
 ) {
 	const preferences = useSelector((state) => state.settings.preferences);
@@ -108,13 +108,16 @@ const parseAccessoriesAndMisc = (
 			snowfall.incompleteData;
 
 		const tempThreshold = winSettings.openIfTempThreshold.enabled
-			? temperature.avg >= winSettings.openIfTempThreshold.minValue &&
-			  temperature.avg <= winSettings.openIfTempThreshold.maxValue
+			? temperature?.avg >= winSettings.openIfTempThreshold.minValue &&
+			  temperature?.avg <= winSettings.openIfTempThreshold.maxValue
 			: null;
-		const aqiThreshold = winSettings.openIfAqiThreshold.enabled
-			? aqi.max <= winSettings.openIfAqiThreshold.value
-			: null;
-		const rainOrSnow = winSettings.closeIfRainOrSnow ? precipitation.min > 0 || snowfall > 0 : null;
+		const aqiThreshold =
+			aqi === null
+				? null
+				: winSettings.openIfAqiThreshold.enabled
+				? aqi.max <= winSettings.openIfAqiThreshold.value
+				: null;
+		const rainOrSnow = winSettings.closeIfRainOrSnow ? precipitation?.min > 0 || snowfall > 0 : null;
 
 		const icon = rainOrSnow
 			? miscellaneousIcons.windows.closed
