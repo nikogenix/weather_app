@@ -1,7 +1,7 @@
 import { Box, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import { useState } from "react";
 
-const RecommendationsFullView = ({ recommendations }) => {
+const RecommendationsFullView = ({ recommendations, alignment }) => {
 	const [minMaxAvgClothing, setMinMaxAvgClothing] = useState("avg");
 	const handleClothingToggle = (event, newValue) => {
 		if (newValue !== null) setMinMaxAvgClothing(newValue);
@@ -9,7 +9,7 @@ const RecommendationsFullView = ({ recommendations }) => {
 
 	return (
 		<Box>
-			<Box sx={{ display: "flex", marginBottom: 2 }}>
+			<Box sx={{ display: "flex", marginBottom: 2, justifyContent: alignment }}>
 				<Typography
 					variant="subtitle2"
 					sx={{
@@ -73,7 +73,7 @@ const RecommendationsFullView = ({ recommendations }) => {
 					</ToggleButton>
 				</ToggleButtonGroup>
 			</Box>
-			<Box sx={{ display: "flex" }}>
+			<Box sx={{ display: "flex", justifyContent: alignment }}>
 				<Box
 					sx={{
 						position: "relative",
@@ -91,39 +91,43 @@ const RecommendationsFullView = ({ recommendations }) => {
 				</Box>
 			</Box>
 
-			<Typography
-				variant="subtitle2"
-				sx={{
-					paddingRight: 1,
-					paddingTop: 0.4,
-					borderBottom: "3px solid gray",
-					borderBottomColor: "primary.dark",
-					width: "fit-content",
-					marginY: 2,
-				}}
-			>
-				accessories
-			</Typography>
-			<Box sx={{ display: "flex" }}>
+			<Box sx={{ display: "flex", justifyContent: alignment }}>
+				<Typography
+					variant="subtitle2"
+					sx={{
+						paddingRight: 1,
+						paddingTop: 0.4,
+						borderBottom: "3px solid gray",
+						borderBottomColor: "primary.dark",
+						width: "fit-content",
+						marginY: 2,
+					}}
+				>
+					accessories
+				</Typography>
+			</Box>
+			<Box sx={{ display: "flex", justifyContent: alignment }}>
 				<Box>{recommendations.accessories.glovesCapComforter.icon}</Box>
 				<Box>{recommendations.accessories.sunHatUmbrella.icon}</Box>
 				<Box>{recommendations.accessories.sunglasses.icon}</Box>
 				<Box>{recommendations.accessories.umbrellaRainCoat.icon}</Box>
 			</Box>
-			<Typography
-				variant="subtitle2"
-				sx={{
-					paddingRight: 1,
-					paddingTop: 0.4,
-					borderBottom: "3px solid gray",
-					borderBottomColor: "primary.dark",
-					width: "fit-content",
-					marginY: 2,
-				}}
-			>
-				miscellaneous
-			</Typography>
-			<Box sx={{ display: "flex" }}>
+			<Box sx={{ display: "flex", justifyContent: alignment }}>
+				<Typography
+					variant="subtitle2"
+					sx={{
+						paddingRight: 1,
+						paddingTop: 0.4,
+						borderBottom: "3px solid gray",
+						borderBottomColor: "primary.dark",
+						width: "fit-content",
+						marginY: 2,
+					}}
+				>
+					miscellaneous
+				</Typography>
+			</Box>
+			<Box sx={{ display: "flex", justifyContent: alignment }}>
 				<Box>{recommendations.miscellaneous.sunscreen.icon}</Box>
 				<Box>{recommendations.miscellaneous.mask.icon}</Box>
 				<Box>{recommendations.miscellaneous.water.icon}</Box>
