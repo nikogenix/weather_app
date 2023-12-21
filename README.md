@@ -118,8 +118,9 @@
             -   [x] dark/light mode
             -   [x] unit preference
             -   [x] slider based options for clothing/accessory
-            -   [ ] customise the c/a items
+            -   [ ] customise the [c/a][c/a] items
             -   [x] reset settings
+            -   [ ] set more parameters - e.g. minimum amount of precipitation chance needed for recommendations
         -   [ ] persist settings data
             -   [x] guest mode (local storage)
             -   [ ] user settings (DB)
@@ -129,19 +130,19 @@
         -   [ ] current time
             -   [x] weather panel
                 -   [x] wind direction icon
-            -   [ ] c/a panel
+            -   [ ] [c/a][c/a] panel
         -   [ ] hourly/daily
             -   [x] daily timeline
             -   [x] hourly weather
                 -   [x] graph
                 -   [x] timeline
-            -   [ ] c/a recommendations in the details section for each day
+            -   [ ] [c/a][c/a] recommendations in the details section for each day
         -   [ ] warnings for severe weather conditions
     -   [ ] trip page
         -   [ ] store multiple search results
         -   [ ] option to remove one/all
-        -   [ ] display weather & c/a next to each trip location
-        -   [ ] c/a overview panel for the whole trip
+        -   [ ] display weather & [c/a][c/a] next to each trip location
+        -   [ ] [c/a][c/a] overview panel for the whole trip
     -   [ ] others
         -   [x] tooltips
             -   [x] aqi ranges
@@ -163,6 +164,7 @@
     -   [x] Error: `<path>` attribute d: Expected number, "MNaN,150CNaN,149.…" ocurrs when clicking the last element in the daily weather timeline
         -   [ fixed ] was actually related to the charts, not the timeline, due to the end time being 1 hour earlier on the last day
     -   [ ] the tooltips for UV and AQI info sometimes highlight the wrong category, or highlight a category while no data is available
+    -   [ ] weather icons load a couple seconds late on the first search after a refresh
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -186,3 +188,7 @@ Distributed under the GNU AGPLv3 License. See `LICENSE.txt` for more information
 -   [README Template](https://github.com/othneildrew/Best-README-Template)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- META -->
+
+[c/a]: ## "clothing and accessories"
