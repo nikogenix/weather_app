@@ -155,7 +155,19 @@ const WeatherRecommendationIcon = ({ iconName, size, color }) => {
 	if (!IconData) return <>missing icon</>;
 
 	return (
-		<Tooltip title={IconData.description}>
+		<Tooltip
+			title={IconData.description}
+			PopperProps={{
+				modifiers: [
+					{
+						name: "offset",
+						options: {
+							offset: [0, -10],
+						},
+					},
+				],
+			}}
+		>
 			<SvgIcon viewBox="0 0 40 40" style={{ fontSize: size, color }}>
 				<IconData.component style={{ fontSize: size }} />
 			</SvgIcon>

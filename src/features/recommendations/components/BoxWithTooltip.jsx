@@ -10,13 +10,23 @@ const BoxWithTooltip = ({ content, tooltipEnabled, tooltipMessage = "incomplete 
 				<Box>{content}</Box>
 				<Tooltip
 					title={tooltipMessage}
-					placement="top"
+					placement="right"
 					sx={{
 						position: "absolute",
 						top: -15,
-						right: -2.5,
+						right: -10,
 						filter: "invert(68%) sepia(81%) saturate(4119%) hue-rotate(3deg) brightness(104%) contrast(106%)",
 						// filter source: https://codepen.io/themau5/pen/QWwaYKR
+					}}
+					PopperProps={{
+						modifiers: [
+							{
+								name: "offset",
+								options: {
+									offset: [0, -10],
+								},
+							},
+						],
 					}}
 				>
 					<ErrorTwoToneIcon />
