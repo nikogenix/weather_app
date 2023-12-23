@@ -83,7 +83,13 @@ const WeatherGraphs = ({ chartData, data }) => {
 	const dateValueFormatter = (date) => dayjs.tz(date, data.location.timezone).format("h A");
 
 	return (
-		<Paper sx={{ pt: 3 }}>
+		<Paper
+			sx={{
+				pt: 3,
+				background: "linear-gradient(135deg, rgba(106,85,145,0.15) 0%, rgba(255,255,255,0) 40% 100%)",
+				mb: 5,
+			}}
+		>
 			{[
 				filteredTempSeries,
 				filteredPrecipitationSeries,

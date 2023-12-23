@@ -59,7 +59,15 @@ const WeatherTimelineHourly = ({ chartData, hourSelection, handleHourChange, day
 	}, [chartData, date, daySelection]);
 
 	return (
-		<Paper ref={containerRef} sx={{ width: "100%", overflowX: "scroll", p: 0 }}>
+		<Paper
+			ref={containerRef}
+			sx={{
+				width: "100%",
+				overflowX: "scroll",
+				p: 0,
+				background: "linear-gradient(135deg, rgba(255,255,255,0) 0% 60%, rgba(106,85,145,0.1) 90%)",
+			}}
+		>
 			<ToggleButtonGroup value={hourSelection} exclusive onChange={handleHourChange} aria-label="Platform">
 				{chartData.hours.map((hour, i) => (
 					<ToggleButton

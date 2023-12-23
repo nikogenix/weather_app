@@ -13,7 +13,15 @@ dayjs.extend(timezone);
 
 const WeatherTimelineDaily = ({ data, daySelection, handleDayChange }) => {
 	return (
-		<Paper sx={{ width: "100%", overflowX: "scroll", p: 0, mt: 3 }}>
+		<Paper
+			sx={{
+				width: "100%",
+				overflowX: "scroll",
+				p: 0,
+				mt: 3,
+				background: "linear-gradient(135deg, rgba(106,85,145,0.15) 0%, rgba(255,255,255,0) 40% 100%)",
+			}}
+		>
 			<ToggleButtonGroup value={daySelection} exclusive onChange={handleDayChange} aria-label="Platform">
 				{data.daily.time.map((day, i) => (
 					<ToggleButton
