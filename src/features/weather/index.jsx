@@ -32,8 +32,6 @@ const Weather = () => {
 			? 0
 			: data.hourly.time.indexOf(dayjs(date).format("YYYY-MM-DDTHH:[00]"));
 
-	const weatherWarning = false;
-
 	const [daySelection, setDaySelection] = useState("");
 	const [hourSelection, setHourSelection] = useState("");
 
@@ -112,12 +110,7 @@ const Weather = () => {
 
 	return (
 		<Suspense fallback={<Loading />}>
-			<CurrentWeather
-				data={data}
-				selectedTime={selectedTime}
-				forecastStartIndex={forecastStartIndex}
-				weatherWarning={weatherWarning}
-			/>
+			<CurrentWeather data={data} selectedTime={selectedTime} forecastStartIndex={forecastStartIndex} />
 			<WeatherTimelineDaily data={data} daySelection={daySelection} handleDayChange={handleDayChange} />
 
 			<WeatherTimelineHourly
