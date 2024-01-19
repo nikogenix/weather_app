@@ -38,7 +38,7 @@ const CustomPopper = function (props) {
 	);
 };
 
-export default function AutocompleteInput() {
+export default function AutocompleteInput({ handleSearch }) {
 	const [inputValue, setInputValue] = React.useState("");
 	const [options, setOptions] = React.useState([]);
 
@@ -88,6 +88,12 @@ export default function AutocompleteInput() {
 			value={location}
 			inputValue={inputValue}
 			freeSolo
+			autoHighlight
+			onKeyDown={(event) => {
+				if (event.key === "Enter") {
+					handleSearch();
+				}
+			}}
 			onChange={(event, newValue) => {
 				handleLocationChange(newValue);
 			}}

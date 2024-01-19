@@ -14,7 +14,7 @@ const SearchForm = () => {
 	const { date, location } = useSelector((state) => state.search);
 	const { temperatureUnit } = useSelector((state) => state.settings);
 
-	const handleClick = async () => {
+	const handleSearch = async () => {
 		const { data, aqi } = await getWeather(date, location, temperatureUnit);
 		console.log(data);
 		console.log(location);
@@ -31,9 +31,9 @@ const SearchForm = () => {
 
 			<Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
 
-			<AutocompleteInput></AutocompleteInput>
+			<AutocompleteInput handleSearch={handleSearch}></AutocompleteInput>
 
-			<IconButton type="button" sx={{ p: "10px" }} aria-label="search" onClick={handleClick}>
+			<IconButton type="button" sx={{ p: "10px" }} aria-label="search" onClick={handleSearch}>
 				<SearchIcon />
 			</IconButton>
 
