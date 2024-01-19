@@ -122,21 +122,25 @@ const RecommendationsFullView = ({ recommendations, alignment }) => {
 					content={recommendations.accessories.glovesCapComforter.icon}
 					tooltipEnabled={recommendations.accessories.glovesCapComforter.incompleteData}
 					disabled={recommendations.accessories.glovesCapComforter.disabled}
+					hideIfNoContent={true}
 				/>
 				<BoxWithTooltip
 					content={recommendations.accessories.sunHatUmbrella.icon}
 					tooltipEnabled={recommendations.accessories.sunHatUmbrella.incompleteData}
 					disabled={recommendations.accessories.sunHatUmbrella.disabled}
+					hideIfNoContent={true}
 				/>
 				<BoxWithTooltip
 					content={recommendations.accessories.sunglasses.icon}
 					tooltipEnabled={recommendations.accessories.sunglasses.incompleteData}
 					disabled={recommendations.accessories.sunglasses.disabled}
+					hideIfNoContent={true}
 				/>
 				<BoxWithTooltip
 					content={recommendations.accessories.umbrellaRainCoat.icon}
 					tooltipEnabled={recommendations.accessories.umbrellaRainCoat.incompleteData}
 					disabled={recommendations.accessories.umbrellaRainCoat.disabled}
+					hideIfNoContent={true}
 				/>
 			</Box>
 			<Box sx={{ display: "flex", justifyContent: alignment }}>
@@ -159,26 +163,31 @@ const RecommendationsFullView = ({ recommendations, alignment }) => {
 					content={recommendations.miscellaneous.sunscreen.icon}
 					tooltipEnabled={recommendations.miscellaneous.sunscreen.incompleteData}
 					disabled={recommendations.miscellaneous.sunscreen.disabled}
+					hideIfNoContent={true}
 				/>
 				<BoxWithTooltip
 					content={recommendations.miscellaneous.mask.icon}
 					tooltipEnabled={recommendations.miscellaneous.mask.incompleteData}
 					disabled={recommendations.miscellaneous.mask.disabled}
+					hideIfNoContent={true}
 				/>
 				<BoxWithTooltip
 					content={recommendations.miscellaneous.water.icon}
 					tooltipEnabled={recommendations.miscellaneous.water.incompleteData}
 					disabled={recommendations.miscellaneous.water.disabled}
+					hideIfNoContent={true}
 				/>
 				<BoxWithTooltip
 					content={recommendations.miscellaneous.noElectronics.icon}
 					tooltipEnabled={recommendations.miscellaneous.noElectronics.incompleteData}
 					disabled={recommendations.miscellaneous.noElectronics.disabled}
+					hideIfNoContent={true}
 				/>
 				<BoxWithTooltip
 					content={recommendations.miscellaneous.windows.icon}
 					tooltipEnabled={recommendations.miscellaneous.windows.incompleteData}
 					disabled={recommendations.miscellaneous.windows.disabled}
+					hideIfNoContent={true}
 				/>
 			</Box>
 		</Box>

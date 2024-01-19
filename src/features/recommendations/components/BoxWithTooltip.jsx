@@ -1,8 +1,15 @@
 import { Box, Tooltip } from "@mui/material";
 import ErrorTwoToneIcon from "@mui/icons-material/ErrorTwoTone";
 
-const BoxWithTooltip = ({ content, tooltipEnabled, tooltipMessage = "incomplete forecast data", disabled, sx }) => {
-	if (!content) return <Box sx={{ mx: 0.5, ...sx }}></Box>;
+const BoxWithTooltip = ({
+	content,
+	tooltipEnabled,
+	tooltipMessage = "incomplete forecast data",
+	disabled,
+	sx,
+	hideIfNoContent,
+}) => {
+	if (!content) return <Box sx={{ mx: 0.5, ...sx, display: hideIfNoContent && "none" }}></Box>;
 	if (disabled) return;
 	if (tooltipEnabled)
 		return (
