@@ -95,6 +95,7 @@
     -   [ ] search
         -   [x] autocomplete location with API data
             -   [x] debounce requests
+            -   [ ] suggestions when input has typos
         -   [ ] option to select location on map
         -   [ ] option to search based on user's location
         -   [x] date & time selection
@@ -127,10 +128,10 @@
             -   [ ] carry over guest settings upon account creation
 -   [ ] weather content & clothing/accessory recommendation
     -   [ ] home page
-        -   [ ] current time
+        -   [x] current time
             -   [x] weather panel
                 -   [x] wind direction icon
-            -   [ ] [c/a][c/a] panel
+            -   [x] [c/a][c/a] panel
         -   [ ] hourly/daily
             -   [x] daily timeline
             -   [x] hourly weather
@@ -165,6 +166,7 @@
         -   [ fixed ] was actually related to the charts, not the timeline, due to the end time being 1 hour earlier on the last day
     -   [ ] the tooltips for UV and AQI info sometimes highlight the wrong category, or highlight a category while no data is available
     -   [ ] weather icons load a couple seconds late on the first search after a refresh
+    -   [ ] keep page scrollbar visible when opening a modal (i.e. preferences)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
