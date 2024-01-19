@@ -106,7 +106,7 @@
         -   [ ] search history
         -   [ ] bookmarked locations - save & remove
         -   [ ] improve UX
-            -   [ ] allow search when user presses enter
+            -   [x] allow search when user presses enter
             -   [ ] disable search when there is no location selected/no input
     -   [x] dark/light mode
     -   [x] unit preference (metric/imperial)
