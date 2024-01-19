@@ -8,7 +8,13 @@ import AirQualityTable from "./AirQualityTable";
 import UvIndexTable from "./UvIndexTable";
 import Recommendations from "../../recommendations";
 
-const CurrentWeather = ({ data, selectedTime, forecastStartIndex, weatherWarning }) => {
+const CurrentWeather = ({ data, selectedTime, forecastStartIndex }) => {
+	const recommendationStartDate = data.hourly.time[forecastStartIndex]
+		.split("")
+		.toSpliced(11, 2, selectedTime.slice(0, 2))
+		.join("");
+	const recommendationEndDate = data.hourly.time[forecastStartIndex].split("").toSpliced(11, 2, "23").join("");
+
 	return (
 		<Box
 			sx={{
@@ -201,7 +207,14 @@ const CurrentWeather = ({ data, selectedTime, forecastStartIndex, weatherWarning
 					sx={{ pt: 3, pr: 3 }}
 				/>
 				<CardContent>
-					<Recommendations data={data} type={"full"} iconSize={50} alignment={"center"} />
+					<Recommendations
+						data={data}
+						type={"full"}
+						iconSize={50}
+						alignment={"center"}
+						startDate={recommendationStartDate}
+						endDate={recommendationEndDate}
+					/>
 				</CardContent>
 			</Card>
 		</Box>
